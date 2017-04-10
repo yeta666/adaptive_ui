@@ -49,7 +49,7 @@ public class JudgeUserType {
         //转换数据格式
         List answersList = (List)JSON.parse(answers);
         //计算用户类型
-        //测试
+        //测试develop分支
 
 
         return null;
