@@ -1,9 +1,9 @@
 package com.adaptive.ui.service;
 
-import com.adaptive.ui.controller.GetQuestionaryController;
+import com.adaptive.ui.controller.QuestionaryController;
 import com.adaptive.ui.domain.Questionary;
 import com.adaptive.ui.domain.Result;
-import com.adaptive.ui.repositary.QuestionaryRepositary;
+import com.adaptive.ui.repositary2.QuestionaryRepositary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,9 @@ import java.util.Map;
  * 获取调查表信息的逻辑处理类
  */
 @Service
-public class GetQuestionaryService {
+public class QuestionaryService {
 
-    private static final Logger logger = LoggerFactory.getLogger(GetQuestionaryController.class);
+    private static final Logger logger = LoggerFactory.getLogger(QuestionaryController.class);
 
     @Autowired
     private QuestionaryRepositary questionaryRepositary;
