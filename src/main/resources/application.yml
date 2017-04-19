@@ -2,11 +2,16 @@ server:
   port: 8081
   context-path: /adaptive_ui
 spring:
-  datasource:
+  datasource1:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/iteach_cernet
+    url: jdbc:mysql://127.0.0.1:3306/iteach_cernet?useUnicode=true&characterEncoding=utf-8
     username: root
     password: root
+  datasource2:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/iteach_adaptive_ui?useUnicode=true&characterEncoding=utf-8
+      username: root
+      password: root
   jpa:
     hibernate:
       ddl-auto: update
