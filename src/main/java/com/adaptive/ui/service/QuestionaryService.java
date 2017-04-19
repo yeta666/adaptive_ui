@@ -1,8 +1,8 @@
 package com.adaptive.ui.service;
 
 import com.adaptive.ui.controller.QuestionaryController;
-import com.adaptive.ui.domain.Questionary;
-import com.adaptive.ui.domain.Result;
+import com.adaptive.ui.domain2.Questionary;
+import com.adaptive.ui.util.ResultUtil;
 import com.adaptive.ui.repositary2.QuestionaryRepositary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class QuestionaryService {
     @Autowired
     private QuestionaryRepositary questionaryRepositary;
 
-    public Result getQuestionary(){
+    public ResultUtil getQuestionary(){
         List<Questionary> questionaryList = questionaryRepositary.findAll();
         if(questionaryList != null){
             List resultList = new ArrayList();
@@ -40,9 +40,9 @@ public class QuestionaryService {
                 resultMap.put("answer", answerList);
                 resultList.add(resultMap);
             }
-            return new Result(true, "", resultList);
+            return new ResultUtil(true, "", resultList);
         }else{
-            return new Result(false, "数据库中没有调查表的信息！", null);
+            return new ResultUtil(false, "数据库中没有调查表的信息！", null);
         }
     }
 }

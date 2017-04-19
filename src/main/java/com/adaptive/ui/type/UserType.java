@@ -1,4 +1,4 @@
-package com.adaptive.ui.util;
+package com.adaptive.ui.type;
 
 /**
  * Created by yeta on 2017/4/6/006.

@@ -40,7 +40,7 @@ public class RepositorySecondaryConfig {
         return builder
                 .dataSource(secondaryDS)
                 .properties(getVendorProperties(secondaryDS))
-                .packages("com.adaptive.ui.domain")
+                .packages("com.adaptive.ui.domain2")
                 .persistenceUnit("secondaryPersistenceUnit")
                 .build();
     }

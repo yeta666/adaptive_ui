@@ -1,14 +1,18 @@
 package com.adaptive.ui.util;
 
-import com.adaptive.ui.domain.Model;
+import com.adaptive.ui.domain2.Model;
+import com.adaptive.ui.domain2.TrainArray;
 import com.adaptive.ui.id3Tree.TrainModel;
 import com.adaptive.ui.id3Tree.TreeNode;
 import com.adaptive.ui.service.ModelService;
+import com.adaptive.ui.service.TrainArrayService;
+import com.adaptive.ui.type.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 与决策树模型有关的工具类
@@ -31,34 +35,39 @@ public class TreeModelUtil {
     @Autowired
     private ModelService modelService;
 
+    @Autowired
+    private TrainArrayService trainArrayService;
+
     /**
      * 获取训练集的方法
      * @return
      */
     public void getData(){
+
         //初始化属性集
         this.attributesArray = new String[]{"outlook", "temperature", "humidity", "windy", "play"};
 
+        //从数据库中获取训练集
+        List<TrainArray> trainArrayList = trainArrayService.findAll();
+
+        //将数据转换成Object[String[], String[], ...]的形式
+        Object[] trainArrays = new Object[trainArrayList.size()];
+        for(int i = 0; i < trainArrayList.size(); i++){
+            TrainArray trainArrayObject = trainArrayList.get(i);
+            String[] trainArrayArray = new String[this.attributesArray.length];
+            trainArrayArray[0] = trainArrayObject.getOutlook();
+            trainArrayArray[1] = trainArrayObject.getTemperature();
+            trainArrayArray[2] = trainArrayObject.getHumidity();
+            trainArrayArray[3] = trainArrayObject.getWindy();
+            trainArrayArray[4] = trainArrayObject.getPlay();
+            trainArrays[i] = trainArrayArray;
+        }
+
         //初始化训练集
-        this.trainArrays = new Object[]{
-                new String[] { "sunny", "hot", "high", "FALSE", "no" },
-                new String[] { "sunny", "hot", "high", "TRUE", "no" },
-                new String[] { "overcast", "hot", "high", "FALSE", "yes" },
-                new String[] { "rainy", "mild", "high", "FALSE", "yes" },
-                new String[] { "rainy", "cool", "normal", "FALSE", "yes" },
-                new String[] { "rainy", "cool", "normal", "TRUE", "no" },
-                new String[] { "overcast", "cool", "normal", "TRUE", "yes" },
-                new String[] { "sunny", "mild", "high", "FALSE", "no" },
-                new String[] { "sunny", "cool", "normal", "FALSE", "yes" },
-                new String[] { "rainy", "mild", "normal", "FALSE", "yes" },
-                new String[] { "sunny", "mild", "normal", "TRUE", "yes" },
-                new String[] { "overcast", "mild", "high", "TRUE", "yes" },
-                new String[] { "overcast", "hot", "normal", "FALSE", "yes" },
-                new String[] { "rainy", "mild", "high", "TRUE", "no" }
-        };
+        this.trainArrays = trainArrays;
 
         //初始化最后结果的索引
-        this.resultIndex = 4;
+        this.resultIndex = this.attributesArray.length - 1;
     }
 
     /**
@@ -128,6 +137,15 @@ public class TreeModelUtil {
             }
         }else{
             this.modelResult = treeNode.getNodeName();
+
+            //将源数据 + 计算结果存入训练集中
+            TrainArray trainArray = new TrainArray();
+            trainArray.setOutlook(data[0]);
+            trainArray.setTemperature(data[1]);
+            trainArray.setHumidity(data[2]);
+            trainArray.setWindy(data[3]);
+            trainArray.setPlay(this.modelResult);
+            trainArrayService.save(trainArray);
         }
     }
 

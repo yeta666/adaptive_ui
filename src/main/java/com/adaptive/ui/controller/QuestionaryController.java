@@ -1,6 +1,6 @@
 package com.adaptive.ui.controller;
 
-import com.adaptive.ui.domain.Result;
+import com.adaptive.ui.util.ResultUtil;
 import com.adaptive.ui.service.QuestionaryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class QuestionaryController {
     private QuestionaryService questionaryService;
 
     @GetMapping(value = "/getQuestionary")
-    public Result getQuestionary(){
+    public ResultUtil getQuestionary(){
         return questionaryService.getQuestionary();
     }
 }

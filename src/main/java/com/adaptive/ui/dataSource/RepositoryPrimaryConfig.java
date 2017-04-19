@@ -49,7 +49,7 @@ public class RepositoryPrimaryConfig {
         return builder
                 .dataSource(primaryDS)
                 .properties(getVendorProperties(primaryDS))
-                .packages("com.adaptive.ui.domain") //设置实体类所在位置
+                .packages("com.adaptive.ui.domain1") //设置实体类所在位置
                 .persistenceUnit("primaryPersistenceUnit")
                 .build();
     }

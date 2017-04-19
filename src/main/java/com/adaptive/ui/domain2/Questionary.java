@@ -1,4 +1,4 @@
-package com.adaptive.ui.domain;
+package com.adaptive.ui.domain2;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
