@@ -1,6 +1,6 @@
 package com.adaptive.ui.repositary2;
 
-import com.adaptive.ui.domain.Model;
+import com.adaptive.ui.domain2.Model;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

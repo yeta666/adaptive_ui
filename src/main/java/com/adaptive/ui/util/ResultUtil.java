@@ -1,10 +1,10 @@
-package com.adaptive.ui.domain;
+package com.adaptive.ui.util;
 
 /**
  * Created by yeta on 2017/4/6/006.
  * http请求返回的最外层对象
  */
-public class Result {
+public class ResultUtil {
     //请求状态
     private boolean status;
     //提示信息
@@ -13,10 +13,10 @@ public class Result {
     private Object data;
 
     //构造方法
-    public Result() {
+    public ResultUtil() {
     }
 
-    public Result(boolean status, String message, Object data) {
+    public ResultUtil(boolean status, String message, Object data) {
         this.status = status;
         this.message = message;
         this.data = data;

@@ -1,6 +1,6 @@
 package com.adaptive.ui.repositary2;
 
-import com.adaptive.ui.domain.Questionary;
+import com.adaptive.ui.domain2.Questionary;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

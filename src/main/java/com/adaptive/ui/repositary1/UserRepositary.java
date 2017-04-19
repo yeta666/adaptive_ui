@@ -1,6 +1,6 @@
 package com.adaptive.ui.repositary1;
 
-import com.adaptive.ui.domain.User;
+import com.adaptive.ui.domain1.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

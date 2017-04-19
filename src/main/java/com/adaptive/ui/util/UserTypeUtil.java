@@ -1,63 +1,78 @@
 package com.adaptive.ui.util;
 
-import com.adaptive.ui.domain.Result;
-import com.adaptive.ui.domain.User;
+import com.adaptive.ui.id3Tree.TreeNode;
 import com.adaptive.ui.repositary1.UserRepositary;
+import com.adaptive.ui.type.UserType;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 /**
- * Created by yeta on 2017/4/6/006.
- * 计算用户类型的类
+ * 和用户类型有关的工具类
+ * Created by yeta on 2017/4/10/010.
  */
 @Component
-public class JudgeUserType {
+public class UserTypeUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(JudgeUserType.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserTypeUtil.class);
 
     @Autowired
-    private UserRepositary userRepositary;
+    private TreeModelUtil treeModelUtil;
 
     /**
      * 通过机器学习方法计算用户类型
+     * @param data
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public String getUserType(String[] data) throws IOException, ClassNotFoundException{
+        if(data == null && data.length == 0){
+            return "";
+        }
+        //获取决策树模型
+        TreeNode treeNode = treeModelUtil.getModel();
+        //获取给定的数据按照模型走一边之后的结果
+        treeModelUtil.getResult(treeNode, data);
+        return treeModelUtil.getModelResult();
+    }
+
+    /**
+     * 根据用户id获取用户数据，并封装成决策树模型能懂的格式
      * @param userId
      * @return
      */
-    public Result judgeUserType(Integer userId){
-        User user = userRepositary.findOne(userId);
-        if(user != null) {
-            if(user.getUserGender().equals("女")){
-                return new Result(true, "", UserType.TYPE1);
-            }else if(user.getUserGender().equals("男")){
-                return new Result(true, "", UserType.TYPE2);
-            }else{
-                return new Result(false, "数据库中没有该用户性别信息！", null);
-            }
-        }else{
-            return new Result(false, "数据库中没有该用户任何信息！", null);
+    public String[] getUserData(Integer userId){
+        if(userId == null){
+            return new String[0];
         }
+        String[] data1 = new String[]{"sunny", "hot", "high", "FALSE"};
+        String[] data2 = new String[]{"sunny", "hot", "high", "TRUE"};
+        String[] data3 = new String[]{"overcast", "hot", "high", "FALSE"};
+        String[] data4 = new String[]{"rainy", "mild", "high", "FALSE"};
+
+        return data1;
     }
+
 
     /**
      * 通过调查表计算用户类型
      * @param answers
      * @return
      */
-    public Result judgeUserTypeByQuestionary(String answers) {
+    public String getUserTypeByQuestionary(String answers) {
 
         if(answers == null || answers.equals("")){
-            return new Result(false, "接收到的数据为空！", null);
+            return null;
         }
 
         //转换数据格式
-        List answersList = (List)JSON.parse(answers);
+        List answersList = (List) JSON.parse(answers);
 
         /**
          * 计算用户类型，计算规则：
@@ -113,36 +128,22 @@ public class JudgeUserType {
         String temp_type = "";
         for(int i = 0; i < 4; i++){
             for(int j = i + 1; j < 4; j++)
-            if(levelArray[j] < levelArray[i]){
-                //交换level
-                temp_level = levelArray[j];
-                levelArray[j] = levelArray[i];
-                levelArray[i] = temp_level;
-                //交换type
-                temp_type = typeArray[j];
-                typeArray[j] = typeArray[i];
-                typeArray[i] = temp_type;
-            }
+                if(levelArray[j] < levelArray[i]){
+                    //交换level
+                    temp_level = levelArray[j];
+                    levelArray[j] = levelArray[i];
+                    levelArray[i] = temp_level;
+                    //交换type
+                    temp_type = typeArray[j];
+                    typeArray[j] = typeArray[i];
+                    typeArray[i] = temp_type;
+                }
         }
 
         logger.info("levelArray after sort************************* " + Arrays.toString(levelArray));
         logger.info("typeArray after sort************************* " + Arrays.toString(typeArray));
 
-        List typesList = new ArrayList();
-        //筛选level>=5的type
-        for(int i = 0, j = 0; i < 4; i++){
-            if(levelArray[i] >= 5){
-                typesList.add(new TypeUtil(typeArray[i], levelArray[i]));
-            }else{
-                j++;
-            }
-            if(j == 4){
-                //全都<5
-                typesList.add(new TypeUtil(typeArray[3], levelArray[3]));
-            }
-        }
-
-        return new Result(true, "", typesList);
+        return typeArray[typeArray.length - 1];
     }
 
     /**
