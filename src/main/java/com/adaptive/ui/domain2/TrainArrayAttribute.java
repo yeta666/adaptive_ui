@@ -63,9 +63,6 @@ public class TrainArrayAttribute {
     //attribute16
     private String attribute16;
 
-    //attribute17
-    private String attribute17;
-
     //模型类型
     private String modelType;
 
@@ -208,14 +205,6 @@ public class TrainArrayAttribute {
 
     public void setAttribute16(String attribute16) {
         this.attribute16 = attribute16;
-    }
-
-    public String getAttribute17() {
-        return attribute17;
-    }
-
-    public void setAttribute17(String attribute17) {
-        this.attribute17 = attribute17;
     }
 
     public String getModelType() {

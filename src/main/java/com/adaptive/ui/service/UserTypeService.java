@@ -35,7 +35,8 @@ public class UserTypeService {
             return new ResultUtil(false, "未获取到该用户的数据！", null);
         }
         //计算用户类型
-        //String userType = userTypeUtil.getUserType(data);
+        String userType = userTypeUtil.getUserType(data);
+        logger.info("userType********************************* " + userType);
         //封装返回数据
         return new ResultUtil(false, "", data);
     }

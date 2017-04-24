@@ -51,7 +51,7 @@ public class TreeModelUtil {
 
         //初始化属性集
         TrainArrayAttribute trainArrayAttribute = trainArrayAttributeService.findAllByModelType(ModelType.TYPE1);
-        String[] attributesArray = new String[18];
+        String[] attributesArray = new String[17];
         attributesArray[0] = trainArrayAttribute.getAttribute1();
         attributesArray[1] = trainArrayAttribute.getAttribute2();
         attributesArray[2] = trainArrayAttribute.getAttribute3();
@@ -68,8 +68,7 @@ public class TreeModelUtil {
         attributesArray[13] = trainArrayAttribute.getAttribute14();
         attributesArray[14] = trainArrayAttribute.getAttribute15();
         attributesArray[15] = trainArrayAttribute.getAttribute16();
-        attributesArray[16] = trainArrayAttribute.getAttribute17();
-        attributesArray[17] = trainArrayAttribute.getModelType();
+        attributesArray[16] = trainArrayAttribute.getModelType();
         this.attributesArray = attributesArray;
 
         //从数据库中获取训练集
@@ -82,22 +81,21 @@ public class TreeModelUtil {
             String[] trainArrayArray = new String[this.attributesArray.length];
             trainArrayArray[0] = trainArrayObject.getGender();
             trainArrayArray[1] = trainArrayObject.getEntranceTime();
-            trainArrayArray[2] = trainArrayObject.getEducationalLevel();
-            trainArrayArray[3] = trainArrayObject.getLoginNum();
-            trainArrayArray[4] = trainArrayObject.getBbsPostNum();
-            trainArrayArray[5] = trainArrayObject.getBbsPostTime();
-            trainArrayArray[6] = trainArrayObject.getBbsPostQuality();
-            trainArrayArray[7] = trainArrayObject.getBbsReplyNum();
-            trainArrayArray[8] = trainArrayObject.getBbsReplyTime();
-            trainArrayArray[9] = trainArrayObject.getLearnAllCourseNum();
-            trainArrayArray[10] = trainArrayObject.getLearnCourseBeginTime();
-            trainArrayArray[11] = trainArrayObject.getTestNum();
-            trainArrayArray[12] = trainArrayObject.getTestScore();
-            trainArrayArray[13] = trainArrayObject.getTestBeginTime();
-            trainArrayArray[14] = trainArrayObject.getMassedLearningNum();
-            trainArrayArray[15] = trainArrayObject.getChooseCourseNum();
-            trainArrayArray[16] = trainArrayObject.getChooseCoursePartsProportion();
-            trainArrayArray[17] = trainArrayObject.getUserType();
+            trainArrayArray[2] = trainArrayObject.getLoginNum();
+            trainArrayArray[3] = trainArrayObject.getBbsPostNum();
+            trainArrayArray[4] = trainArrayObject.getBbsPostTime();
+            trainArrayArray[5] = trainArrayObject.getBbsPostQuality();
+            trainArrayArray[6] = trainArrayObject.getBbsReplyNum();
+            trainArrayArray[7] = trainArrayObject.getBbsReplyTime();
+            trainArrayArray[8] = trainArrayObject.getLearnAllCourseNum();
+            trainArrayArray[9] = trainArrayObject.getLearnCourseBeginTime();
+            trainArrayArray[10] = trainArrayObject.getTestNum();
+            trainArrayArray[11] = trainArrayObject.getTestScore();
+            trainArrayArray[12] = trainArrayObject.getTestBeginTime();
+            trainArrayArray[13] = trainArrayObject.getMassedLearningNum();
+            trainArrayArray[14] = trainArrayObject.getChooseCourseNum();
+            trainArrayArray[15] = trainArrayObject.getChooseCoursePartsProportion();
+            trainArrayArray[16] = trainArrayObject.getUserType();
             trainArrays[i] = trainArrayArray;
         }
 
@@ -181,21 +179,20 @@ public class TreeModelUtil {
             TrainArray trainArray = new TrainArray();
             trainArray.setGender(data[0]);
             trainArray.setEntranceTime(data[1]);
-            trainArray.setEducationalLevel(data[2]);
-            trainArray.setLoginNum(data[3]);
-            trainArray.setBbsPostNum(data[4]);
-            trainArray.setBbsPostTime(data[5]);
-            trainArray.setBbsPostQuality(data[6]);
-            trainArray.setBbsReplyNum(data[7]);
-            trainArray.setBbsReplyTime(data[8]);
-            trainArray.setLearnAllCourseNum(data[9]);
-            trainArray.setLearnCourseBeginTime(data[10]);
-            trainArray.setTestNum(data[11]);
-            trainArray.setTestScore(data[12]);
-            trainArray.setTestBeginTime(data[13]);
-            trainArray.setMassedLearningNum(data[14]);
-            trainArray.setChooseCourseNum(data[15]);
-            trainArray.setChooseCoursePartsProportion(data[16]);
+            trainArray.setLoginNum(data[2]);
+            trainArray.setBbsPostNum(data[3]);
+            trainArray.setBbsPostTime(data[4]);
+            trainArray.setBbsPostQuality(data[5]);
+            trainArray.setBbsReplyNum(data[6]);
+            trainArray.setBbsReplyTime(data[7]);
+            trainArray.setLearnAllCourseNum(data[8]);
+            trainArray.setLearnCourseBeginTime(data[9]);
+            trainArray.setTestNum(data[10]);
+            trainArray.setTestScore(data[11]);
+            trainArray.setTestBeginTime(data[12]);
+            trainArray.setMassedLearningNum(data[13]);
+            trainArray.setChooseCourseNum(data[14]);
+            trainArray.setChooseCoursePartsProportion(data[15]);
             trainArray.setUserType(this.modelResult);
             trainArrayService.save(trainArray);
         }

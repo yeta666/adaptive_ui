@@ -21,9 +21,6 @@ public class TrainArray {
     //入学时间
     private String entranceTime;
 
-    //教育水平
-    private String educationalLevel;
-
     //登陆次数
     private String loginNum;
 
@@ -96,14 +93,6 @@ public class TrainArray {
 
     public void setEntranceTime(String entranceTime) {
         this.entranceTime = entranceTime;
-    }
-
-    public String getEducationalLevel() {
-        return educationalLevel;
-    }
-
-    public void setEducationalLevel(String educationalLevel) {
-        this.educationalLevel = educationalLevel;
     }
 
     public String getLoginNum() {
