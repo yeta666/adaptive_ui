@@ -1,7 +1,7 @@
 package com.adaptive.ui.service;
 
-import com.adaptive.ui.domain1.ReSelectCourse;
-import com.adaptive.ui.repositary1.ReSelectCourseRepositary;
+import com.adaptive.ui.domain1.ReSelectCource;
+import com.adaptive.ui.repositary1.ReSelectCourceRepositary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,17 +12,17 @@ import java.util.List;
  * Created by yeta on 2017/4/20/020.
  */
 @Service
-public class ReSelectCourseService {
+public class ReSelectCourceService {
 
     @Autowired
-    private ReSelectCourseRepositary reSelectCourseRepositary;
+    private ReSelectCourceRepositary reSelectCourceRepositary;
 
     /**
      * 根据userId获取用户的选课数据
      * @param userId
      * @return
      */
-    public List<ReSelectCourse> findAllByRscoUserId(Integer userId){
-        return reSelectCourseRepositary.findAllByRscoUserId(userId);
+    public List<ReSelectCource> findAllByRscoUserId(Integer userId){
+        return reSelectCourceRepositary.findAllByRscoUserId(userId);
     }
 }

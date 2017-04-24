@@ -41,7 +41,7 @@ public class UserTypeUtil {
     private ReAutoTestService reAutoTestService;
 
     @Autowired
-    private ReSelectCourseService reSelectCourseService;
+    private ReSelectCourceService reSelectCourceService;
 
     @Autowired
     private StudentMassedLearningService studentMassedLearningService;
@@ -307,14 +307,14 @@ public class UserTypeUtil {
         }
 
         //获取用户的选课数据
-        List<ReSelectCourse> reSelectCourseList = reSelectCourseService.findAllByRscoUserId(userId);
+        List<ReSelectCource> reSelectCourceList = reSelectCourceService.findAllByRscoUserId(userId);
         if(reAutoTestList == null){
             for(int i = 15; i < 17; i++){
                 userData[i] = "";
             }
         }else{
             //选课数
-            if(reSelectCourseList.size() >= 5){
+            if(reSelectCourceList.size() >= 5){
                 userData[15] = "≥5门";
             }else{
                 userData[15] = "<5门";
@@ -324,11 +324,11 @@ public class UserTypeUtil {
             int num2 = 0;
             int num3 = 0;
             int num4 = 0;
-            for(int i = 0; i < reSelectCourseList.size(); i++){
-                float p1 = reSelectCourseList.get(i).getRscoLoginscore() / reSelectCourseList.get(i).getRscoTotalscore();
-                float p2 = reSelectCourseList.get(i).getRscoLearntimescore() / reSelectCourseList.get(i).getRscoTotalscore();
-                float p3 = reSelectCourseList.get(i).getRscoBbsdiscussscore() / reSelectCourseList.get(i).getRscoTotalscore();
-                float p4 = reSelectCourseList.get(i).getRscoSubassessscore() / reSelectCourseList.get(i).getRscoTotalscore();
+            for(int i = 0; i < reSelectCourceList.size(); i++){
+                float p1 = reSelectCourceList.get(i).getRscoLoginscore() / reSelectCourceList.get(i).getRscoTotalscore();
+                float p2 = reSelectCourceList.get(i).getRscoLearntimescore() / reSelectCourceList.get(i).getRscoTotalscore();
+                float p3 = reSelectCourceList.get(i).getRscoBbsdiscussscore() / reSelectCourceList.get(i).getRscoTotalscore();
+                float p4 = reSelectCourceList.get(i).getRscoSubassessscore() / reSelectCourceList.get(i).getRscoTotalscore();
                 if(p1 >= p2 && p1 >= p3 && p1 >= p4){
                     num1++;
                 }else if(p2 >= p1 && p2 >= p3 && p2 >= p4){

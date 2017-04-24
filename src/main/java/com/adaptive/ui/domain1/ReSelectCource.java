@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by yeta on 2017/4/6/006.
  */
 @Entity
-public class ReSelectCourse {
+public class ReSelectCource {
 	//id
 	@Id
 	@GeneratedValue
@@ -71,7 +71,7 @@ public class ReSelectCourse {
 	private int rscoGradeId;
 
 	//构造方法
-	public ReSelectCourse() {
+	public ReSelectCource() {
 	}
 
 	//getter和setterf方法
