@@ -1,8 +1,8 @@
 package com.adaptive.ui.type;
 
 /**
- * Created by yeta on 2017/4/6/006.
  * 所有用户类型
+ * Created by yeta on 2017/4/6/006.
  */
 public interface UserType {
     public static final String TYPE1 = "活跃型";

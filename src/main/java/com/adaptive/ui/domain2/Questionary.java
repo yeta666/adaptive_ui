@@ -5,8 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Created by yeta on 2017/4/6/006.
  * 调查表实体类
+ * Created by yeta on 2017/4/6/006.
  */
 @Entity
 public class Questionary {
@@ -21,6 +21,10 @@ public class Questionary {
     private String answer1;
     //回答2
     private String answer2;
+
+    //构造方法
+    public Questionary() {
+    }
 
     //getter和setter方法
     public Integer getId() {

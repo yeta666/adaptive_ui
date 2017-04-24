@@ -3,8 +3,8 @@ package com.adaptive.ui.id3Tree;
 import java.io.Serializable;
 
 /**
- * Created by yeta on 2017/4/13/013.
  * 树节点类
+ * Created by yeta on 2017/4/13/013.
  */
 public class TreeNode implements Serializable {
     //父节点

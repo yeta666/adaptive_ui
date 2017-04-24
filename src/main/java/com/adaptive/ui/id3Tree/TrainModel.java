@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.TreeSet;
 
 /**
- * Created by yeta on 2017/4/13/013.
  * 训练模型的类
+ * Created by yeta on 2017/4/13/013.
  */
 public class TrainModel {
     //根节点

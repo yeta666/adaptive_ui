@@ -1,8 +1,8 @@
 package com.adaptive.ui.id3Tree;
 
 /**
- * Created by yeta on 2017/4/13/013.
  * 与熵有关的类
+ * Created by yeta on 2017/4/13/013.
  */
 public class Entropy {
     public static double getEntropy(int p_num, int total_num){

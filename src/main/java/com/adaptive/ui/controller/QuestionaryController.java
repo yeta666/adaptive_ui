@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Created by yeta on 2017/4/7/007.
  * 获取调查表信息的控制器类
+ * Created by yeta on 2017/4/7/007.
  */
 @RestController
 public class QuestionaryController {

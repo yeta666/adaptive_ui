@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 调查表有关的逻辑处理类
  * Created by yeta on 2017/4/7/007.
- * 获取调查表信息的逻辑处理类
  */
 @Service
 public class QuestionaryService {

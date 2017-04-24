@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 /**
+ * 用户类型有关的逻辑处理类
  * Created by yeta on 2017/4/6/006.
- * 自适应界面的逻辑处理
  */
 @Service
 public class UserTypeService {
@@ -35,9 +35,9 @@ public class UserTypeService {
             return new ResultUtil(false, "未获取到该用户的数据！", null);
         }
         //计算用户类型
-        String userType = userTypeUtil.getUserType(data);
+        //String userType = userTypeUtil.getUserType(data);
         //封装返回数据
-        return new ResultUtil(true, "", userType);
+        return new ResultUtil(false, "", data);
     }
 
     /**

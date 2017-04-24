@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class TrainArrayService {
 
-    private static final Logger logger = LoggerFactory.getLogger(TrainArray.class);
+    private static final Logger logger = LoggerFactory.getLogger(TrainArrayService.class);
 
     @Autowired
     private TrainArrayRepositary trainArrayRepositary;

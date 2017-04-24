@@ -11,8 +11,8 @@ import java.io.IOException;
 
 
 /**
- * Created by yeta on 2017/4/6/006.
  * 和用户类型有关的请求转发类
+ * Created by yeta on 2017/4/6/006.
  */
 @RestController
 public class UserTypeController {

@@ -4,10 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-
 /**
+ * 与user表对应的实体类
  * Created by yeta on 2017/4/6/006.
- * 与User表对应的实体类
  */
 @Entity
 public class User {
@@ -15,50 +14,75 @@ public class User {
     @Id
     @GeneratedValue
     private Integer userId;
+
     //部门id
     private Integer userDepaId;
+
     //班级id
     private Integer userClasId;
+
     //用户名
     private String userLoginname;
+
     //密码
     private String userPwd;
+
     //姓名
     private String userRealname;
+
     //性别
     private String userGender;
+
     //用户类型
     private Integer userType;
+
     //入学时间
     private String userYearOfEntrance;
-    //
+
+    //考籍号
     private String userCadasExamNum;
-    //
+
+    //身份证
     private String userIdNum;
+
     //邮箱
     private String userEmail;
+
     //电话
     private String userPhoneNum;
+
     //地址
     private String userAddress;
+
     //教育水平
     private String userEduLevel;
-    //
+
+    //工作或学习单位
     private String userWorkunit;
-    //
+
+    //标志是否激活
     private Boolean userVerify;
+
     //登陆状态
     private Integer userLoginstate;
+
     //登陆次数
     private Integer userLoginnum;
+
     //备注
     private String userRemark;
+
     //用户部门类型
     private Integer userDepartType;
+
     //用户头像
     private Integer userCoverPictureId;
 
-    //setter和getter方法
+    //构造方法
+    public User() {
+    }
+
+    //getter和setter方法
     public Integer getUserId() {
         return userId;
     }
@@ -235,31 +259,4 @@ public class User {
         this.userCoverPictureId = userCoverPictureId;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", userDepaId=" + userDepaId +
-                ", userClasId=" + userClasId +
-                ", userLoginname='" + userLoginname + '\'' +
-                ", userPwd='" + userPwd + '\'' +
-                ", userRealname='" + userRealname + '\'' +
-                ", userGender='" + userGender + '\'' +
-                ", userType=" + userType +
-                ", userYearOfEntrance='" + userYearOfEntrance + '\'' +
-                ", userCadasExamNum='" + userCadasExamNum + '\'' +
-                ", userIdNum='" + userIdNum + '\'' +
-                ", userEmail='" + userEmail + '\'' +
-                ", userPhoneNum='" + userPhoneNum + '\'' +
-                ", userAddress='" + userAddress + '\'' +
-                ", userEduLevel='" + userEduLevel + '\'' +
-                ", userWorkunit='" + userWorkunit + '\'' +
-                ", userVerify=" + userVerify +
-                ", userLoginstate=" + userLoginstate +
-                ", userLoginnum=" + userLoginnum +
-                ", userRemark='" + userRemark + '\'' +
-                ", userDepartType=" + userDepartType +
-                ", userCoverPictureId=" + userCoverPictureId +
-                '}';
-    }
 }

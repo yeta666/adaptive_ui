@@ -1,8 +1,8 @@
 package com.adaptive.ui.util;
 
 /**
- * Created by yeta on 2017/4/6/006.
  * http请求返回的最外层对象
+ * Created by yeta on 2017/4/6/006.
  */
 public class ResultUtil {
     //请求状态

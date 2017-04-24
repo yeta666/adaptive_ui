@@ -2,9 +2,11 @@ package com.adaptive.ui.util;
 
 import com.adaptive.ui.domain2.Model;
 import com.adaptive.ui.domain2.TrainArray;
+import com.adaptive.ui.domain2.TrainArrayAttribute;
 import com.adaptive.ui.id3Tree.TrainModel;
 import com.adaptive.ui.id3Tree.TreeNode;
 import com.adaptive.ui.service.ModelService;
+import com.adaptive.ui.service.TrainArrayAttributeService;
 import com.adaptive.ui.service.TrainArrayService;
 import com.adaptive.ui.type.ModelType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,9 @@ public class TreeModelUtil {
     private ModelService modelService;
 
     @Autowired
+    private TrainArrayAttributeService trainArrayAttributeService;
+
+    @Autowired
     private TrainArrayService trainArrayService;
 
     /**
@@ -45,21 +50,54 @@ public class TreeModelUtil {
     public void getData(){
 
         //初始化属性集
-        this.attributesArray = new String[]{"outlook", "temperature", "humidity", "windy", "play"};
+        TrainArrayAttribute trainArrayAttribute = trainArrayAttributeService.findAllByModelType(ModelType.TYPE1);
+        String[] attributesArray = new String[18];
+        attributesArray[0] = trainArrayAttribute.getAttribute1();
+        attributesArray[1] = trainArrayAttribute.getAttribute2();
+        attributesArray[2] = trainArrayAttribute.getAttribute3();
+        attributesArray[3] = trainArrayAttribute.getAttribute4();
+        attributesArray[4] = trainArrayAttribute.getAttribute5();
+        attributesArray[5] = trainArrayAttribute.getAttribute6();
+        attributesArray[6] = trainArrayAttribute.getAttribute7();
+        attributesArray[7] = trainArrayAttribute.getAttribute8();
+        attributesArray[8] = trainArrayAttribute.getAttribute9();
+        attributesArray[9] = trainArrayAttribute.getAttribute10();
+        attributesArray[10] = trainArrayAttribute.getAttribute11();
+        attributesArray[11] = trainArrayAttribute.getAttribute12();
+        attributesArray[12] = trainArrayAttribute.getAttribute13();
+        attributesArray[13] = trainArrayAttribute.getAttribute14();
+        attributesArray[14] = trainArrayAttribute.getAttribute15();
+        attributesArray[15] = trainArrayAttribute.getAttribute16();
+        attributesArray[16] = trainArrayAttribute.getAttribute17();
+        attributesArray[17] = trainArrayAttribute.getModelType();
+        this.attributesArray = attributesArray;
 
         //从数据库中获取训练集
-        List<TrainArray> trainArrayList = trainArrayService.findAll();
+        List<TrainArray> trainArraysList = trainArrayService.findAll();
 
         //将数据转换成Object[String[], String[], ...]的形式
-        Object[] trainArrays = new Object[trainArrayList.size()];
-        for(int i = 0; i < trainArrayList.size(); i++){
-            TrainArray trainArrayObject = trainArrayList.get(i);
+        Object[] trainArrays = new Object[trainArraysList.size()];
+        for(int i = 0; i < trainArraysList.size(); i++){
+            TrainArray trainArrayObject = trainArraysList.get(i);
             String[] trainArrayArray = new String[this.attributesArray.length];
-            trainArrayArray[0] = trainArrayObject.getOutlook();
-            trainArrayArray[1] = trainArrayObject.getTemperature();
-            trainArrayArray[2] = trainArrayObject.getHumidity();
-            trainArrayArray[3] = trainArrayObject.getWindy();
-            trainArrayArray[4] = trainArrayObject.getPlay();
+            trainArrayArray[0] = trainArrayObject.getGender();
+            trainArrayArray[1] = trainArrayObject.getEntranceTime();
+            trainArrayArray[2] = trainArrayObject.getEducationalLevel();
+            trainArrayArray[3] = trainArrayObject.getLoginNum();
+            trainArrayArray[4] = trainArrayObject.getBbsPostNum();
+            trainArrayArray[5] = trainArrayObject.getBbsPostTime();
+            trainArrayArray[6] = trainArrayObject.getBbsPostQuality();
+            trainArrayArray[7] = trainArrayObject.getBbsReplyNum();
+            trainArrayArray[8] = trainArrayObject.getBbsReplyTime();
+            trainArrayArray[9] = trainArrayObject.getLearnAllCourseNum();
+            trainArrayArray[10] = trainArrayObject.getLearnCourseBeginTime();
+            trainArrayArray[11] = trainArrayObject.getTestNum();
+            trainArrayArray[12] = trainArrayObject.getTestScore();
+            trainArrayArray[13] = trainArrayObject.getTestBeginTime();
+            trainArrayArray[14] = trainArrayObject.getMassedLearningNum();
+            trainArrayArray[15] = trainArrayObject.getChooseCourseNum();
+            trainArrayArray[16] = trainArrayObject.getChooseCoursePartsProportion();
+            trainArrayArray[17] = trainArrayObject.getUserType();
             trainArrays[i] = trainArrayArray;
         }
 
@@ -138,13 +176,27 @@ public class TreeModelUtil {
         }else{
             this.modelResult = treeNode.getNodeName();
 
-            //将源数据 + 计算结果存入训练集中
+            //将源数据 + 计算结果存入训练集中，每个用户对应一条数据，如果数据库中已有该用户的数据，则更新
+
             TrainArray trainArray = new TrainArray();
-            trainArray.setOutlook(data[0]);
-            trainArray.setTemperature(data[1]);
-            trainArray.setHumidity(data[2]);
-            trainArray.setWindy(data[3]);
-            trainArray.setPlay(this.modelResult);
+            trainArray.setGender(data[0]);
+            trainArray.setEntranceTime(data[1]);
+            trainArray.setEducationalLevel(data[2]);
+            trainArray.setLoginNum(data[3]);
+            trainArray.setBbsPostNum(data[4]);
+            trainArray.setBbsPostTime(data[5]);
+            trainArray.setBbsPostQuality(data[6]);
+            trainArray.setBbsReplyNum(data[7]);
+            trainArray.setBbsReplyTime(data[8]);
+            trainArray.setLearnAllCourseNum(data[9]);
+            trainArray.setLearnCourseBeginTime(data[10]);
+            trainArray.setTestNum(data[11]);
+            trainArray.setTestScore(data[12]);
+            trainArray.setTestBeginTime(data[13]);
+            trainArray.setMassedLearningNum(data[14]);
+            trainArray.setChooseCourseNum(data[15]);
+            trainArray.setChooseCoursePartsProportion(data[16]);
+            trainArray.setUserType(this.modelResult);
             trainArrayService.save(trainArray);
         }
     }
@@ -153,4 +205,5 @@ public class TreeModelUtil {
     public String getModelResult() {
         return modelResult;
     }
+    
 }

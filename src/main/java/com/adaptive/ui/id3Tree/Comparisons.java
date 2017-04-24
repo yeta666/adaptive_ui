@@ -3,8 +3,8 @@ package com.adaptive.ui.id3Tree;
 import java.util.Comparator;
 
 /**
- * Created by yeta on 2017/4/12/012.
  * TreeSet存储自定义类需要传的比较方法
+ * Created by yeta on 2017/4/12/012.
  */
 public class Comparisons implements Comparator {
     @Override

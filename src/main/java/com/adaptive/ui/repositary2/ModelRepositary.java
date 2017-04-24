@@ -10,5 +10,11 @@ import java.util.List;
  * Created by yeta on 2017/4/17/017.
  */
 public interface ModelRepositary extends JpaRepository<Model, Integer> {
-    List<Model> findByType(String type);
+
+    /**
+     * 根据模型类型获取全部模型
+     * @param type
+     * @return
+     */
+    public List<Model> findByType(String type);
 }

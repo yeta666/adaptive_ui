@@ -1,17 +1,16 @@
 package com.adaptive.ui.type;
 
 /**
- * Created by yeta on 2017/4/6/006.
  * 所有模型类型
+ * Created by yeta on 2017/4/6/006.
  */
 public interface ModelType {
-    public static final String TYPE1 = "决策树模型";
+    public static final String TYPE1 = "DecisionTree";
 
     /**
      * 每种类型的解释
      *
      * 1.决策树模型
-     * 活跃型学习者倾向于通过积极地做一些事—讨论或应用或解释给别人听来掌握信息。而沉思型学习者更喜欢首先安静地思考问题。“来，我们试试看，看会怎样”这是活跃型学习者的口头禅。而“我们先好好想想吧”是沉思型学习者的通常反应。活跃型学习者比倾向于独立工作的沉思型学习者更喜欢集体工作。 每个人都是有时候是活跃型，有时候是沉思型的，只是有时候某种倾向的程度不同，可能很强烈或一般，亦或很轻微。
      *
      */
 }

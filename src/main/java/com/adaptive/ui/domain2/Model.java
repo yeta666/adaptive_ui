@@ -6,8 +6,8 @@ import javax.persistence.Id;
 import java.util.Date;
 
 /**
- * Created by yeta on 2017/4/17/017.
  * 与treeModel表对应的实体类
+ * Created by yeta on 2017/4/17/017.
  */
 @Entity
 public class Model {
