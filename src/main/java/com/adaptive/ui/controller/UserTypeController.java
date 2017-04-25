@@ -28,7 +28,8 @@ public class UserTypeController {
      * @return
      */
     @GetMapping(value = "/getUserType")
-    public ResultUtil getUserType(@RequestParam(value = "userId", required = true) Integer userId)
+    public ResultUtil getUserType(
+            @RequestParam(value = "userId", required = true) Integer userId)
             throws IOException, ClassNotFoundException{
         return userTypeService.getUserType(userId);
     }
@@ -39,7 +40,9 @@ public class UserTypeController {
      * @return
      */
     @PostMapping(value = "/getUserTypeByQuestionary")
-    public ResultUtil getUserTypeByQuestionary(@RequestParam(value = "answers") String answers){
-        return userTypeService.getUserTypeByQuestionary(answers);
+    public ResultUtil getUserTypeByQuestionary(
+            @RequestParam(value = "answers", required = true) String answers,
+            @RequestParam(value = "userId", required = true) Integer userId){
+        return userTypeService.getUserTypeByQuestionary(userId, answers);
     }
 }

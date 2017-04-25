@@ -44,9 +44,9 @@ public class UserTypeService {
     /**
      * 通过调查表判断用户类型的方法
      */
-    public ResultUtil getUserTypeByQuestionary(String answers) {
+    public ResultUtil getUserTypeByQuestionary(Integer userId, String answers) {
         //计算用户类型
-        String userType = userTypeUtil.getUserTypeByQuestionary(answers);
+        String userType = userTypeUtil.getUserTypeByQuestionary(userId, answers);
         //封装返回数据
         return new ResultUtil(true, "", userType);
     }
