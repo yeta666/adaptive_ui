@@ -16,4 +16,5 @@ public interface MessageType {
     public static final String message8 = "从数据库中获取训练集失败！";
     public static final String message9 = "训练模型失败！";
     public static final String message10 = "保存模型到数据库失败！";
+    public static final String message11 = "您无权访问，请联系管理员！";
 }

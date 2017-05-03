@@ -68,8 +68,7 @@ public class ModelService {
      * @throws ClassNotFoundException
      */
     //@Scheduled(cron = "0 0/3 8-20 * * ?")   //每天8:00 - 20:00一分钟执行一次
-    @Scheduled(cron = "0 6 * * *")  //每天6:00点执行一次
-    //@Scheduled(cron = "0 0 16 * * ?")   //每天16:00执行一次
+    @Scheduled(cron = "0 0 6 * * ?")   //每天6:00执行一次
     public void trainModel() throws IOException, ClassNotFoundException {
 
         logger.info("********************开始训练模型！*********************");
