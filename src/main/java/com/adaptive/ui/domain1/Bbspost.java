@@ -10,7 +10,7 @@ import javax.persistence.Id;
  * Created by yeta on 2017/4/6/006.
  */
 @Entity
-public class BbsPost {
+public class Bbspost {
     //id
     @Id
     @GeneratedValue
@@ -62,7 +62,7 @@ public class BbsPost {
     private String bbpoCourName;
 
     //构造方法
-    public BbsPost() {
+    public Bbspost() {
     }
 
     //setter和setter方法

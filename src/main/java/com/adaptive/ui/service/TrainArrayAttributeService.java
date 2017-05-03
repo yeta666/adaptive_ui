@@ -19,7 +19,7 @@ public class TrainArrayAttributeService {
      * 根据modelType获取训练集属性的方法
      * @return
      */
-    public TrainArrayAttribute findAllByModelType(String modelType){
-        return trainArrayAttributeRepositary.findAllByModelType(modelType);
+    public TrainArrayAttribute findByModelType(String modelType){
+        return trainArrayAttributeRepositary.findByModelType(modelType);
     }
 }

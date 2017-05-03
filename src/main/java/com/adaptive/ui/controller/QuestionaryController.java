@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class QuestionaryController {
 
-    private static final Logger logger = LoggerFactory.getLogger(QuestionaryController.class);
-
     @Autowired
     private QuestionaryService questionaryService;
 

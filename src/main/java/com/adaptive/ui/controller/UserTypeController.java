@@ -17,8 +17,6 @@ import java.io.IOException;
 @RestController
 public class UserTypeController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserTypeController.class);
-
     @Autowired
     private UserTypeService userTypeService;
 

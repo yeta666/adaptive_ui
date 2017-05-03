@@ -1,7 +1,6 @@
 package com.adaptive.ui.domain2;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
@@ -10,11 +9,8 @@ import javax.persistence.Id;
  */
 @Entity
 public class QuestionaryAnswers {
-    //id
-    @Id
-    @GeneratedValue
-    private Integer id;
     //用户id
+    @Id
     private Integer userId;
     //回答1
     private String answer1;
@@ -68,13 +64,6 @@ public class QuestionaryAnswers {
     }
 
     //getter和setter方法
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Integer getUserId() {
         return userId;

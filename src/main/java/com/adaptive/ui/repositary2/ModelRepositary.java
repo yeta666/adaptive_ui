@@ -16,5 +16,5 @@ public interface ModelRepositary extends JpaRepository<Model, Integer> {
      * @param type
      * @return
      */
-    public List<Model> findByType(String type);
+    Model findFirstByTypeOrderByIdDesc(String type);
 }

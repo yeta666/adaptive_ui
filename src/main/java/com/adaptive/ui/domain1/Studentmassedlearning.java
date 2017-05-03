@@ -9,7 +9,7 @@ import javax.persistence.Id;
  * Created by yeta on 2017/4/6/006.
  */
 @Entity
-public class StudentMassedLearning {
+public class Studentmassedlearning {
 	//id
 	@Id
 	@GeneratedValue
@@ -22,7 +22,7 @@ public class StudentMassedLearning {
 	private Integer smleMaleId;
 
 	//构造方法
-	public StudentMassedLearning() {
+	public Studentmassedlearning() {
 	}
 
 	//getter和setter方法

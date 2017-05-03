@@ -13,5 +13,5 @@ public interface TrainArrayAttributeRepositary extends JpaRepository<TrainArrayA
      * 根据modelType获取训练集属性的方法
      * @return
      */
-    public TrainArrayAttribute findAllByModelType(String modelType);
+    TrainArrayAttribute findByModelType(String modelType);
 }

@@ -10,7 +10,7 @@ import javax.persistence.Id;
  * Created by yeta on 2017/4/6/006.
  */
 @Entity
-public class BbsReply {
+public class Bbsreply {
 	//id
 	@Id
 	@GeneratedValue
@@ -32,7 +32,7 @@ public class BbsReply {
 	private String bbreContent;
 
 	//构造方法
-	public BbsReply() {
+	public Bbsreply() {
 	}
 
 	//getter和setter方法

@@ -4,13 +4,17 @@ import com.adaptive.ui.domain2.Model;
 import com.adaptive.ui.domain2.QuestionaryAnswers;
 import com.adaptive.ui.domain2.TrainArray;
 import com.adaptive.ui.domain2.TrainArrayAttribute;
+import com.adaptive.ui.exception.MyException;
 import com.adaptive.ui.id3Tree.TrainModel;
 import com.adaptive.ui.id3Tree.TreeNode;
 import com.adaptive.ui.service.ModelService;
 import com.adaptive.ui.service.QuestionaryAnswersService;
 import com.adaptive.ui.service.TrainArrayAttributeService;
 import com.adaptive.ui.service.TrainArrayService;
+import com.adaptive.ui.type.MessageType;
 import com.adaptive.ui.type.ModelType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +29,8 @@ import java.util.List;
 @Component
 public class TreeModelUtil {
 
+    private final static Logger logger = LoggerFactory.getLogger(TreeModelUtil.class);
+
     //属性集
     private String[] attributesArray;
     //训练集
@@ -33,8 +39,6 @@ public class TreeModelUtil {
     int resultIndex;
     //给定数据，根据模型得出的结果
     private String modelResult;
-    //最新的那个模型的id
-    private Integer lastModelId;
 
     @Autowired
     private ModelService modelService;
@@ -46,10 +50,10 @@ public class TreeModelUtil {
     private TrainArrayService trainArrayService;
 
     @Autowired
-    private QuestionaryAnswersService questionaryAnswersService;
+    private UserTypeUtil userTypeUtil;
 
     @Autowired
-    private UserTypeUtil userTypeUtil;
+    private QuestionaryAnswersService questionaryAnswersService;
 
     /**
      * 获取训练集的方法
@@ -58,37 +62,39 @@ public class TreeModelUtil {
     public void getData(){
 
         //初始化属性集
-        TrainArrayAttribute trainArrayAttribute = trainArrayAttributeService.findAllByModelType(ModelType.TYPE1);
-        String[] attributesArray = new String[16];
-        if(trainArrayAttribute != null){
-            attributesArray[0] = trainArrayAttribute.getAttribute1();
-            attributesArray[1] = trainArrayAttribute.getAttribute2();
-            attributesArray[2] = trainArrayAttribute.getAttribute3();
-            attributesArray[3] = trainArrayAttribute.getAttribute4();
-            attributesArray[4] = trainArrayAttribute.getAttribute5();
-            attributesArray[5] = trainArrayAttribute.getAttribute6();
-            attributesArray[6] = trainArrayAttribute.getAttribute7();
-            attributesArray[7] = trainArrayAttribute.getAttribute8();
-            attributesArray[8] = trainArrayAttribute.getAttribute9();
-            attributesArray[9] = trainArrayAttribute.getAttribute10();
-            attributesArray[10] = trainArrayAttribute.getAttribute11();
-            attributesArray[11] = trainArrayAttribute.getAttribute12();
-            attributesArray[12] = trainArrayAttribute.getAttribute13();
-            attributesArray[13] = trainArrayAttribute.getAttribute14();
-            attributesArray[14] = trainArrayAttribute.getAttribute15();
-            attributesArray[15] = trainArrayAttribute.getAttribute16();
-            this.attributesArray = attributesArray;
+        TrainArrayAttribute trainArrayAttribute = trainArrayAttributeService.findByModelType(ModelType.TYPE1);
+        if(trainArrayAttribute == null){
+            logger.info("**************************** " + MessageType.message7);
+            throw new MyException(MessageType.message7);
         }
+        String[] attributesArray = new String[16];
+        attributesArray[0] = trainArrayAttribute.getAttribute1();
+        attributesArray[1] = trainArrayAttribute.getAttribute2();
+        attributesArray[2] = trainArrayAttribute.getAttribute3();
+        attributesArray[3] = trainArrayAttribute.getAttribute4();
+        attributesArray[4] = trainArrayAttribute.getAttribute5();
+        attributesArray[5] = trainArrayAttribute.getAttribute6();
+        attributesArray[6] = trainArrayAttribute.getAttribute7();
+        attributesArray[7] = trainArrayAttribute.getAttribute8();
+        attributesArray[8] = trainArrayAttribute.getAttribute9();
+        attributesArray[9] = trainArrayAttribute.getAttribute10();
+        attributesArray[10] = trainArrayAttribute.getAttribute11();
+        attributesArray[11] = trainArrayAttribute.getAttribute12();
+        attributesArray[12] = trainArrayAttribute.getAttribute13();
+        attributesArray[13] = trainArrayAttribute.getAttribute14();
+        attributesArray[14] = trainArrayAttribute.getAttribute15();
+        attributesArray[15] = trainArrayAttribute.getAttribute16();
+        this.attributesArray = attributesArray;
 
 
-        //从数据库中获取训练集
-        /*List<TrainArray> trainArraysList = trainArrayService.findAll();*/
+        /*//从数据库中获取训练集
+        List<TrainArray> trainArraysList = trainArrayService.findAll();
 
         //将数据转换成Object[String[], String[], ...]的形式
-        /*Object[] trainArrays = new Object[trainArraysList.size()];
+        Object[] trainArrays = new Object[trainArraysList.size()];
         for(int i = 0; i < trainArraysList.size(); i++){
             TrainArray trainArrayObject = trainArraysList.get(i);
-            String[] trainArrayArray = new String[this.attributesArray.length];
+            String[] trainArrayArray = new String[this.attributesArray.length + 1];
             trainArrayArray[0] = trainArrayObject.getGender();
             trainArrayArray[1] = trainArrayObject.getEntranceTime();
             trainArrayArray[2] = trainArrayObject.getLoginNum();
@@ -111,34 +117,44 @@ public class TreeModelUtil {
 
         //从数据库中获取训练集
         List<QuestionaryAnswers> questionaryAnswersList = questionaryAnswersService.findAll();
+        if(questionaryAnswersList == null || questionaryAnswersList.size() == 0){
+            logger.info("**************************** " + MessageType.message8);
+            throw new MyException(MessageType.message8);
+        }
         Object[] trainArrays = new Object[questionaryAnswersList.size()];
-        if(questionaryAnswersList != null){
-            for(int i = 0; i < questionaryAnswersList.size(); i++){
-                QuestionaryAnswers questionaryAnswers = questionaryAnswersList.get(i);
-                //获取一个userId
-                Integer userId = questionaryAnswers.getUserId();
-                //根据userId获取训练集数据
-                String[] trainArray = new String[17];
-                String[] userDataArray = userTypeUtil.getUserData(userId);
-                trainArray[0] = userDataArray[0];
-                trainArray[1] = userDataArray[1];
-                trainArray[2] = userDataArray[2];
-                trainArray[3] = userDataArray[3];
-                trainArray[4] = userDataArray[4];
-                trainArray[5] = userDataArray[5];
-                trainArray[6] = userDataArray[6];
-                trainArray[7] = userDataArray[7];
-                trainArray[8] = userDataArray[8];
-                trainArray[9] = userDataArray[9];
-                trainArray[10] = userDataArray[10];
-                trainArray[11] = userDataArray[11];
-                trainArray[12] = userDataArray[12];
-                trainArray[13] = userDataArray[13];
-                trainArray[14] = userDataArray[14];
-                trainArray[15] = userDataArray[15];
-                trainArray[16] = questionaryAnswers.getUserType();
-                trainArrays[i] = trainArray;
+        for(int i = 0; i < questionaryAnswersList.size(); i++){
+            QuestionaryAnswers questionaryAnswers = questionaryAnswersList.get(i);
+            //获取一个userId
+            Integer userId = questionaryAnswers.getUserId();
+            if(userId == null || userId.equals("")){
+                logger.info("**************************** " + MessageType.message8);
+                throw new MyException(MessageType.message8);
             }
+            //根据userId获取训练集数据
+            String[] userDataArray = userTypeUtil.getUserData(userId);
+            if(userDataArray == null || userDataArray.length == 0){
+                logger.info("**************************** " + MessageType.message3);
+                throw new MyException(MessageType.message3);
+            }
+            String[] trainArray = new String[userDataArray.length + 1];
+            trainArray[0] = userDataArray[0];
+            trainArray[1] = userDataArray[1];
+            trainArray[2] = userDataArray[2];
+            trainArray[3] = userDataArray[3];
+            trainArray[4] = userDataArray[4];
+            trainArray[5] = userDataArray[5];
+            trainArray[6] = userDataArray[6];
+            trainArray[7] = userDataArray[7];
+            trainArray[8] = userDataArray[8];
+            trainArray[9] = userDataArray[9];
+            trainArray[10] = userDataArray[10];
+            trainArray[11] = userDataArray[11];
+            trainArray[12] = userDataArray[12];
+            trainArray[13] = userDataArray[13];
+            trainArray[14] = userDataArray[14];
+            trainArray[15] = userDataArray[15];
+            trainArray[16] = questionaryAnswers.getUserType();
+            trainArrays[i] = trainArray;
         }
 
         //初始化训练集
@@ -155,6 +171,10 @@ public class TreeModelUtil {
     public TreeNode trainModel() {
         //实例化训练模型类
         TrainModel trainModel = new TrainModel(this.attributesArray, this.trainArrays, this.resultIndex);
+        if(trainModel == null){
+            logger.info("**************************** " + MessageType.message9);
+            throw new MyException(MessageType.message9);
+        }
         //返回决策树模型
         return trainModel.train();
     }
@@ -175,16 +195,24 @@ public class TreeModelUtil {
         model.setType(ModelType.TYPE1);
         model.setCreateData(new Date());
         Model thisModel = modelService.save(model);
-        this.lastModelId = thisModel.getId();
+        if(thisModel == null){
+            logger.info("**************************** " + MessageType.message10);
+            throw new MyException(MessageType.message10);
+        }
         return thisModel;
     }
 
     /**
-     * 根据id从数据库中获取决策树模型的方法
+     * 数据库中获取决策树模型的方法
+     * 取决策树模型类型的最后一条数据
      * @return
      */
     public TreeNode getModel() throws IOException, ClassNotFoundException{
-        Model model = modelService.findOne(this.lastModelId);
+        Model model = modelService.findFirstByTypeOrderByIdDesc(ModelType.TYPE1);
+        if(model == null){
+            logger.info("**************************** " + MessageType.message6);
+            throw new MyException(MessageType.message6);
+        }
         byte[] b = model.getModel();
         ByteArrayInputStream byteArrayInputStream= new ByteArrayInputStream(b);
         ObjectInputStream objectInputStream= new ObjectInputStream(byteArrayInputStream);
@@ -215,34 +243,21 @@ public class TreeModelUtil {
             }
         }else{
             this.modelResult = treeNode.getNodeName();
-
-            //将源数据 + 计算结果存入训练集中，每个用户对应一条数据，如果数据库中已有该用户的数据，则更新
-
-            TrainArray trainArray = new TrainArray();
-            trainArray.setGender(data[0]);
-            trainArray.setEntranceTime(data[1]);
-            trainArray.setLoginNum(data[2]);
-            trainArray.setBbsPostNum(data[3]);
-            trainArray.setBbsPostTime(data[4]);
-            trainArray.setBbsPostQuality(data[5]);
-            trainArray.setBbsReplyNum(data[6]);
-            trainArray.setBbsReplyTime(data[7]);
-            trainArray.setLearnAllCourseNum(data[8]);
-            trainArray.setLearnCourseBeginTime(data[9]);
-            trainArray.setTestNum(data[10]);
-            trainArray.setTestScore(data[11]);
-            trainArray.setTestBeginTime(data[12]);
-            trainArray.setMassedLearningNum(data[13]);
-            trainArray.setChooseCourseNum(data[14]);
-            trainArray.setChooseCoursePartsProportion(data[15]);
-            trainArray.setUserType(this.modelResult);
-            trainArrayService.save(trainArray);
         }
     }
 
-    //给定数据，根据模型得出的结果的获取方法
+    /**
+     * 给定数据，根据模型得出的结果的获取方法
+     */
     public String getModelResult() {
         return modelResult;
+    }
+
+    /**
+     * 设置模型结果的方法
+     */
+    public void setModelResult(){
+        this.modelResult = "";
     }
     
 }

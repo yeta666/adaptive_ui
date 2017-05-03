@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by yeta on 2017/4/6/006.
  */
 @Entity
-public class LearnProcessRecord {
+public class Learnprocessrecord {
 	//id
 	@Id
 	@GeneratedValue
@@ -38,7 +38,7 @@ public class LearnProcessRecord {
 	private Integer lpreResoId;
 
 	//构造方法
-	public LearnProcessRecord() {
+	public Learnprocessrecord() {
 	}
 
 	//getter和setter方法

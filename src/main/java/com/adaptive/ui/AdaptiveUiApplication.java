@@ -9,6 +9,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class AdaptiveUiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AdaptiveUiApplication.class, args);
+		//运行程序
+		SpringApplication springApplication = new SpringApplication(AdaptiveUiApplication.class);
+		springApplication.run(args);
 	}
 }

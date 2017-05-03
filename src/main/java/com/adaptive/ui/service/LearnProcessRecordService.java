@@ -1,6 +1,6 @@
 package com.adaptive.ui.service;
 
-import com.adaptive.ui.domain1.LearnProcessRecord;
+import com.adaptive.ui.domain1.Learnprocessrecord;
 import com.adaptive.ui.repositary1.LearnProcessRecordRepositary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class LearnProcessRecordService {
      * @param userId
      * @return
      */
-    public List<LearnProcessRecord> findAllByBbreUserId(Integer userId){
+    public List<Learnprocessrecord> findAllByBbreUserId(Integer userId){
         return learnProcessRecordRepositary.findAllByLpreUserId(userId);
     }
 }

@@ -2,6 +2,8 @@ package com.adaptive.ui.service;
 
 import com.adaptive.ui.controller.QuestionaryController;
 import com.adaptive.ui.domain2.Questionary;
+import com.adaptive.ui.exception.MyException;
+import com.adaptive.ui.type.MessageType;
 import com.adaptive.ui.util.ResultUtil;
 import com.adaptive.ui.repositary2.QuestionaryRepositary;
 import org.slf4j.Logger;
@@ -28,21 +30,21 @@ public class QuestionaryService {
 
     public ResultUtil getQuestionary(){
         List<Questionary> questionaryList = questionaryRepositary.findAll();
-        if(questionaryList != null){
-            List resultList = new ArrayList();
-            for(int i = 0; i < questionaryList.size(); i++){
-                Map resultMap = new HashMap();
-                List answerList = new ArrayList();
-                resultMap.put("id", questionaryList.get(i).getId());
-                resultMap.put("question", questionaryList.get(i).getQuestion());
-                answerList.add(questionaryList.get(i).getAnswer1());
-                answerList.add(questionaryList.get(i).getAnswer2());
-                resultMap.put("answer", answerList);
-                resultList.add(resultMap);
-            }
-            return new ResultUtil(true, "", resultList);
-        }else{
-            return new ResultUtil(false, "数据库中没有调查表的信息！", null);
+        if(questionaryList == null || questionaryList.size() == 0){
+            throw new MyException(MessageType.message5);
         }
+        //封装返回数据
+        List resultList = new ArrayList();
+        for(int i = 0; i < questionaryList.size(); i++){
+            Map resultMap = new HashMap();
+            List answerList = new ArrayList();
+            resultMap.put("id", questionaryList.get(i).getId());
+            resultMap.put("question", questionaryList.get(i).getQuestion());
+            answerList.add(questionaryList.get(i).getAnswer1());
+            answerList.add(questionaryList.get(i).getAnswer2());
+            resultMap.put("answer", answerList);
+            resultList.add(resultMap);
+        }
+        return new ResultUtil(true, MessageType.message1, resultList);
     }
 }

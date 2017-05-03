@@ -10,7 +10,7 @@ import javax.persistence.Id;
  * Created by yeta on 2017/4/6/006.
  */
 @Entity
-public class ReAutoTest {
+public class ReAutotest {
 	//id
 	@Id
 	@GeneratedValue
@@ -35,7 +35,7 @@ public class ReAutoTest {
 	private Boolean rateIsfinished;
 
 	//构造方法
-	public ReAutoTest() {
+	public ReAutotest() {
 	}
 
 	//getter和setter方法

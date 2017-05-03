@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -59,8 +58,8 @@ public class ModelService {
      * @param type
      * @return
      */
-    public List<Model> findByType(String type){
-        return modelRepositary.findByType(type);
+    public Model findFirstByTypeOrderByIdDesc(String type){
+        return modelRepositary.findFirstByTypeOrderByIdDesc(type);
     }
 
     /**
@@ -68,8 +67,8 @@ public class ModelService {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    @Scheduled(cron = "0 0/1 8-20 * * ?")   //每天8:00 - 20:00一分钟执行一次
-    //@Scheduled(cron = "0 6 * * *")  //每天6:00点执行一次
+    //@Scheduled(cron = "0 0/3 8-20 * * ?")   //每天8:00 - 20:00一分钟执行一次
+    @Scheduled(cron = "0 6 * * *")  //每天6:00点执行一次
     //@Scheduled(cron = "0 0 16 * * ?")   //每天16:00执行一次
     public void trainModel() throws IOException, ClassNotFoundException {
 

@@ -33,4 +33,13 @@ public class QuestionaryAnswersService {
     public List<QuestionaryAnswers> findAll(){
         return questionaryAnswersRepositary.findAll();
     }
+
+    /**
+     * 根据userId获取userType的方法
+     * @param userId
+     * @return
+     */
+    public QuestionaryAnswers findOne(Integer userId){
+        return questionaryAnswersRepositary.findOne(userId);
+    }
 }

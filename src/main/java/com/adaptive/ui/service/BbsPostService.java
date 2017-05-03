@@ -1,6 +1,6 @@
 package com.adaptive.ui.service;
 
-import com.adaptive.ui.domain1.BbsPost;
+import com.adaptive.ui.domain1.Bbspost;
 import com.adaptive.ui.repositary1.BbsPostRepositary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class BbsPostService {
      * @param userId
      * @return
      */
-    public List<BbsPost> findAllByBbpoUserId(Integer userId){
+    public List<Bbspost> findAllByBbpoUserId(Integer userId){
         return bbsPostRepositary.findAllByBbpoUserId(userId);
     }
 }

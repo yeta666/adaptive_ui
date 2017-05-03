@@ -1,13 +1,9 @@
 package com.adaptive.ui.controller;
 
-import com.adaptive.ui.id3Tree.TreeNode;
-import com.adaptive.ui.util.TreeModelUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.adaptive.ui.exception.MyException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
-import java.util.Map;
 
 /**
  * 测试类
@@ -21,12 +17,10 @@ public class HelloController {
      * @return
      */
     @GetMapping(value = "/hello")
-    public String hello(){
-        String hello = "";
-        for(int i = 0; i < 9999; i++){
-            hello += "hello, ";
+    public void hello(@RequestParam(value = "id", required = false) Integer id){
+        if(id == null || id.equals("")){
+            throw new MyException("error");
         }
-        return hello;
     }
 
 }
