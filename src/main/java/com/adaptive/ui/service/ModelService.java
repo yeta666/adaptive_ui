@@ -37,23 +37,6 @@ public class ModelService {
     }
 
     /**
-     * 通过id查询一个模型的方法
-     * @param id
-     * @return
-     */
-    public Model findOne(Integer id){
-        return modelRepositary.findOne(id);
-    }
-
-    /**
-     * 查询全部模型的方法
-     * @return
-     */
-    public List<Model> findAll(){
-        return modelRepositary.findAll();
-    }
-
-    /**
      * 通过type查询一类模型的方法
      * @param type
      * @return

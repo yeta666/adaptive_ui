@@ -27,14 +27,14 @@ public class UserTypeService {
     private UserTypeUtil userTypeUtil;
 
     @Autowired
-    private QuestionaryAnswersService questionaryAnswersService;
+    private QuestionaryService questionaryService;
 
     /**
      * 通过机器学习（决策树分类方法）判断用户类型的方法
      */
     public ResultUtil getUserType(Integer userId) throws IOException, ClassNotFoundException{
         //根据userId获取userType
-        QuestionaryAnswers questionaryAnswers = questionaryAnswersService.findOne(userId);
+        QuestionaryAnswers questionaryAnswers = questionaryService.findOne(userId);
         if (questionaryAnswers != null && questionaryAnswers.getUserType() != null && !questionaryAnswers.getUserType().equals("")) {
             return new ResultUtil(true, MessageType.message1, questionaryAnswers.getUserType());
 

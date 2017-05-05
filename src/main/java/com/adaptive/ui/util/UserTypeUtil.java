@@ -50,7 +50,7 @@ public class UserTypeUtil {
     private StudentMassedLearningService studentMassedLearningService;
 
     @Autowired
-    private QuestionaryAnswersService questionaryAnswersService;
+    private QuestionaryService questionaryService;
 
     /**
      * 通过机器学习方法计算用户类型
@@ -489,7 +489,7 @@ public class UserTypeUtil {
         questionaryAnswers.setAnswer21((String)answersList.get(20));
         questionaryAnswers.setAnswer22((String)answersList.get(21));
         questionaryAnswers.setUserType(typeArray[typeArray.length - 1]);
-        questionaryAnswersService.save(questionaryAnswers);
+        questionaryService.save(questionaryAnswers);
 
         return typeArray[typeArray.length - 1];
     }

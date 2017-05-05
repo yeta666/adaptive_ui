@@ -2,13 +2,12 @@ package com.adaptive.ui.util;
 
 import com.adaptive.ui.domain2.Model;
 import com.adaptive.ui.domain2.QuestionaryAnswers;
-import com.adaptive.ui.domain2.TrainArray;
 import com.adaptive.ui.domain2.TrainArrayAttribute;
 import com.adaptive.ui.exception.MyException;
 import com.adaptive.ui.id3Tree.TrainModel;
 import com.adaptive.ui.id3Tree.TreeNode;
 import com.adaptive.ui.service.ModelService;
-import com.adaptive.ui.service.QuestionaryAnswersService;
+import com.adaptive.ui.service.QuestionaryService;
 import com.adaptive.ui.service.TrainArrayAttributeService;
 import com.adaptive.ui.service.TrainArrayService;
 import com.adaptive.ui.type.MessageType;
@@ -36,7 +35,7 @@ public class TreeModelUtil {
     //训练集
     private Object[] trainArrays;
     //最后结果的索引
-    int resultIndex;
+    private int resultIndex;
     //给定数据，根据模型得出的结果
     private String modelResult;
 
@@ -53,7 +52,7 @@ public class TreeModelUtil {
     private UserTypeUtil userTypeUtil;
 
     @Autowired
-    private QuestionaryAnswersService questionaryAnswersService;
+    private QuestionaryService questionaryService;
 
     /**
      * 获取训练集的方法
@@ -116,7 +115,7 @@ public class TreeModelUtil {
         }*/
 
         //从数据库中获取训练集
-        List<QuestionaryAnswers> questionaryAnswersList = questionaryAnswersService.findAll();
+        List<QuestionaryAnswers> questionaryAnswersList = questionaryService.findAll();
         if(questionaryAnswersList == null || questionaryAnswersList.size() == 0){
             logger.info("**************************** " + MessageType.message8);
             throw new MyException(MessageType.message8);
@@ -193,7 +192,7 @@ public class TreeModelUtil {
         objectOutputStream.close();
         model.setModel(byteArrayOutputStream.toByteArray());
         model.setType(ModelType.TYPE1);
-        model.setCreateData(new Date());
+        model.setCreateDate(new Date());
         Model thisModel = modelService.save(model);
         if(thisModel == null){
             logger.info("**************************** " + MessageType.message10);

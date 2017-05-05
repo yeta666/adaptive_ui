@@ -17,10 +17,8 @@ public class HelloController {
      * @return
      */
     @GetMapping(value = "/hello")
-    public void hello(@RequestParam(value = "id", required = false) Integer id){
-        if(id == null || id.equals("")){
-            throw new MyException("error");
-        }
+    public String hello(@RequestParam(value = "userId", required = true) Integer userId){
+        return "hello";
     }
 
 }

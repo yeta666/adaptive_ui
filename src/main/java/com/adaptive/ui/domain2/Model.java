@@ -20,7 +20,7 @@ public class Model {
     //模型类别
     private String type;
     //创建时间
-    private Date createData;
+    private Date createDate;
 
     //构造方法
     public Model() {
@@ -29,7 +29,7 @@ public class Model {
     public Model(byte[] model, String type, Date createData) {
         this.model = model;
         this.type = type;
-        this.createData = createData;
+        this.createDate = createData;
     }
 
     //getter和setter方法
@@ -57,11 +57,11 @@ public class Model {
         this.type = type;
     }
 
-    public Date getCreateData() {
-        return createData;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreateData(Date createData) {
-        this.createData = createData;
+    public void setCreateDate(Date createData) {
+        this.createDate = createDate;
     }
 }
