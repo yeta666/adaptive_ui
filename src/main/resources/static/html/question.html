@@ -1,0 +1,78 @@
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>quesion管理</title>
+		<link rel="stylesheet" type="text/css" href="../adaptive_ui/css/bootstrap.min.css" />
+	</head>
+
+	<body>
+
+		<div class="container">
+			<div style="margin-top: 20px;">
+				<div class="col-xs-3"></div>
+				<div class="col-xs-3"></div>
+				<div class="col-xs-3"></div>
+				<div class="col-xs-3">
+					<button class="btn btn-warning" id="deletBtn">删除</button>
+					<button class="btn btn-info" data-toggle="modal" data-target="#addModal">增加</button>
+					<a href="home" class="btn btn-primary">返回首页</a>
+				</div>
+			</div>
+			<table class="table table-striped table-hover table-condensed text-center">
+				<thead>
+					<tr>
+						<th style="text-align: center;"><input type="checkbox" class="checkAll" /></th>
+						<th style="text-align: center;">序号</th>
+						<th style="text-align: center;">题目</th>
+						<th style="text-align: center;">答案A</th>
+						<th style="text-align: center;">答案B</th>
+					</tr>
+				</thead>
+				<tbody id="tbody">
+
+				</tbody>
+			</table>
+
+		</div>
+
+		<!-- 模态框（Modal） -->
+		<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">增加题目</h4>
+					</div>
+					<div class="modal-body">
+						<form role="form">
+							<div class="form-group">
+								<label for="name">题目</label>
+								<input type="text" class="form-control" id="question" placeholder="请输入题目">
+							</div>
+							<div class="form-group">
+								<label for="name">答案A</label>
+								<input type="text" class="form-control" id="answer1" placeholder="请输入答案A">
+							</div>
+							<div class="form-group">
+								<label for="name">答案B</label>
+								<input type="text" class="form-control" id="answer2" placeholder="请输入答案B">
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="addBtn" class="btn btn-primary">增加</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal -->
+		</div>
+
+		<script src="../adaptive_ui/js/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../adaptive_ui/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../adaptive_ui/js/question.js" type="text/javascript" charset="utf-8"></script>
+
+	</body>
+
+</html>

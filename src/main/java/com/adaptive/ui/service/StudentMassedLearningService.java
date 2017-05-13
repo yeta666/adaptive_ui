@@ -1,7 +1,7 @@
 package com.adaptive.ui.service;
 
 import com.adaptive.ui.domain1.Studentmassedlearning;
-import com.adaptive.ui.repositary1.StudentMassedLearningRepositary;
+import com.adaptive.ui.repository1.StudentMassedLearningRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class StudentMassedLearningService {
 
     @Autowired
-    private StudentMassedLearningRepositary studentMassedLearningRepositary;
+    private StudentMassedLearningRepository studentMassedLearningRepository;
 
     /**
      * 根据userId获取用户的集中学习数据
@@ -23,6 +23,6 @@ public class StudentMassedLearningService {
      * @return
      */
     public List<Studentmassedlearning> findAllByBbreUserId(Integer userId){
-        return studentMassedLearningRepositary.findAllBySmleUserId(userId);
+        return studentMassedLearningRepository.findAllBySmleUserId(userId);
     }
 }

@@ -1,5 +1,7 @@
 package com.adaptive.ui.controller;
 
+import com.adaptive.ui.domain2.UserAnswers;
+import com.adaptive.ui.service.UserAnswersService;
 import com.adaptive.ui.util.ResultUtil;
 import com.adaptive.ui.service.UserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,26 +21,14 @@ public class UserTypeController {
     private UserTypeService userTypeService;
 
     /**
-     * 处理通过机器学习判断用户类型的请求
+     * 处理获取用户类型的请求方法
      * @param userId
      * @return
      */
-    @GetMapping(value = "/getUserType")
+    @PostMapping(value = "/getUserType")
     public ResultUtil getUserType(
-            @RequestParam(value = "userId", required = true) Integer userId)
-            throws IOException, ClassNotFoundException{
-        return userTypeService.getUserType(userId);
-    }
-
-    /**
-     * 处理通过调查表判断用户类型的请求
-     * @param answers
-     * @return
-     */
-    @PostMapping(value = "/getUserTypeByQuestionary")
-    public ResultUtil getUserTypeByQuestionary(
-            @RequestParam(value = "answers", required = true) String answers,
-            @RequestParam(value = "userId", required = true) Integer userId){
-        return userTypeService.getUserTypeByQuestionary(userId, answers);
+            @RequestParam(value = "userId", required = true) Integer userId,
+            @RequestParam(value = "answers", required = false) String answers) throws IOException, ClassNotFoundException {
+        return userTypeService.getUserType(userId, answers);
     }
 }

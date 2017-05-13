@@ -43,10 +43,10 @@ public class HttpAspect {
         response.setHeader("Access-Control-Allow-Origin", "*");
 
         //检查session中是否有用户信息
-        if (request.getSession().getAttribute("userAuthenticationPassed?") == null || !(boolean) request.getSession().getAttribute("userAuthenticationPassed?")) {
+        /*if (request.getSession().getAttribute("userAuthenticationPassed?") == null || !(boolean) request.getSession().getAttribute("userAuthenticationPassed?")) {
             logger.info("**************************** 未经过认证，拦截非法访问！");
             throw new MyException(MessageType.message11);
-        }
+        }*/
     }
 
     @After("log()")

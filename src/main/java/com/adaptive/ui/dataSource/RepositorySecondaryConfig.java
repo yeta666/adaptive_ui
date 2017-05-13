@@ -21,7 +21,7 @@ import java.util.Map;
 @EnableJpaRepositories(
         entityManagerFactoryRef="entityManagerFactorySecondary",
         transactionManagerRef="transactionManagerSecondary",
-        basePackages= { "com.adaptive.ui.repositary2" })
+        basePackages= {"com.adaptive.ui.repository2"})
 public class RepositorySecondaryConfig {
     @Autowired
     private JpaProperties jpaProperties;

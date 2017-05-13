@@ -49,7 +49,7 @@ public class UserAuthenticationAspect {
         //设置哪url可以跨域请求到本域
         response.setHeader("Access-Control-Allow-Origin", "*");
 
-        //参数验证
+        /*//参数验证
         String userId = request.getParameter("userId");
         String userPassword = request.getParameter("userPassword");
         if(userId == null || userId.equals("") ||
@@ -72,6 +72,6 @@ public class UserAuthenticationAspect {
             throw new MyException(MessageType.message11);
         }
         //保存用户信息到session
-        request.getSession().setAttribute("userAuthenticationPassed?", true);
+        request.getSession().setAttribute("userAuthenticationPassed?", true);*/
     }
 }

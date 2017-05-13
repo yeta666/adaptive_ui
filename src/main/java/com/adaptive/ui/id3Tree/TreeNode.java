@@ -7,16 +7,19 @@ import java.io.Serializable;
  * Created by yeta on 2017/4/13/013.
  */
 public class TreeNode implements Serializable {
+
+    private static final long serialVersionUID = -8566061928745722367L;
+
     //父节点
-    TreeNode parentNode;
+    public TreeNode parentNode;
     //父节点的属性
-    String parentAttribute;
+    public String parentAttribute;
     //节点名
-    String nodeName;
+    public String nodeName;
     //属性
-    String[] attributes;
+    public String[] attributes;
     //子节点
-    TreeNode[] childNodes;
+    public TreeNode[] childNodes;
 
     public TreeNode getParentNode() {
         return parentNode;

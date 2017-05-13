@@ -1,7 +1,7 @@
 package com.adaptive.ui.service;
 
 import com.adaptive.ui.domain1.Bbspost;
-import com.adaptive.ui.repositary1.BbsPostRepositary;
+import com.adaptive.ui.repository1.BbsPostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class BbsPostService {
 
     @Autowired
-    private BbsPostRepositary bbsPostRepositary;
+    private BbsPostRepository bbsPostRepository;
 
     /**
      * 根据userId获取全部用户发布的讨论数据
@@ -23,6 +23,6 @@ public class BbsPostService {
      * @return
      */
     public List<Bbspost> findAllByBbpoUserId(Integer userId){
-        return bbsPostRepositary.findAllByBbpoUserId(userId);
+        return bbsPostRepository.findAllByBbpoUserId(userId);
     }
 }

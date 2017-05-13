@@ -26,13 +26,12 @@ public class Model {
     public Model() {
     }
 
-    public Model(byte[] model, String type, Date createData) {
+    public Model(byte[] model, String type, Date createDate) {
         this.model = model;
         this.type = type;
-        this.createDate = createData;
+        this.createDate = createDate;
     }
 
-    //getter和setter方法
     public Integer getId() {
         return id;
     }
@@ -61,7 +60,7 @@ public class Model {
         return createDate;
     }
 
-    public void setCreateDate(Date createData) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 }

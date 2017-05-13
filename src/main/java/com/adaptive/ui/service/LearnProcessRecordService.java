@@ -1,7 +1,7 @@
 package com.adaptive.ui.service;
 
 import com.adaptive.ui.domain1.Learnprocessrecord;
-import com.adaptive.ui.repositary1.LearnProcessRecordRepositary;
+import com.adaptive.ui.repository1.LearnProcessRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class LearnProcessRecordService {
 
     @Autowired
-    private LearnProcessRecordRepositary learnProcessRecordRepositary;
+    private LearnProcessRecordRepository learnProcessRecordRepository;
 
     /**
      * 根据userId获取用户的学习数据
@@ -23,6 +23,6 @@ public class LearnProcessRecordService {
      * @return
      */
     public List<Learnprocessrecord> findAllByBbreUserId(Integer userId){
-        return learnProcessRecordRepositary.findAllByLpreUserId(userId);
+        return learnProcessRecordRepository.findAllByLpreUserId(userId);
     }
 }

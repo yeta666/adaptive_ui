@@ -1,7 +1,7 @@
 package com.adaptive.ui.service;
 
 import com.adaptive.ui.domain1.User;
-import com.adaptive.ui.repositary1.UserRepositary;
+import com.adaptive.ui.repository1.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     @Autowired
-    private UserRepositary userRepositary;
+    private UserRepository userRepository;
 
     /**
      * 根据userId获取一条用户数据
@@ -21,6 +21,6 @@ public class UserService {
      * @return
      */
     public User findOne(Integer userId){
-        return userRepositary.findOne(userId);
+        return userRepository.findOne(userId);
     }
 }

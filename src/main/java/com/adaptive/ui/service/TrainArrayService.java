@@ -1,7 +1,7 @@
 package com.adaptive.ui.service;
 
 import com.adaptive.ui.domain2.TrainArray;
-import com.adaptive.ui.repositary2.TrainArrayRepositary;
+import com.adaptive.ui.repository2.TrainArrayRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class TrainArrayService {
     private static final Logger logger = LoggerFactory.getLogger(TrainArrayService.class);
 
     @Autowired
-    private TrainArrayRepositary trainArrayRepositary;
+    private TrainArrayRepository trainArrayRepository;
 
     /**
      * 保存一条训练集数据的方法
@@ -27,7 +27,7 @@ public class TrainArrayService {
      * @return
      */
     public TrainArray save(TrainArray trainArray){
-        return trainArrayRepositary.save(trainArray);
+        return trainArrayRepository.save(trainArray);
     }
 
     /**
@@ -35,6 +35,6 @@ public class TrainArrayService {
      * @return
      */
     public List<TrainArray> findAll(){
-        return trainArrayRepositary.findAll();
+        return trainArrayRepository.findAll();
     }
 }

@@ -1,7 +1,7 @@
 package com.adaptive.ui.util;
 
 import com.adaptive.ui.domain1.*;
-import com.adaptive.ui.domain2.QuestionaryAnswers;
+import com.adaptive.ui.domain2.UserAnswers;
 import com.adaptive.ui.exception.MyException;
 import com.adaptive.ui.id3Tree.TreeNode;
 import com.adaptive.ui.service.*;
@@ -50,16 +50,16 @@ public class UserTypeUtil {
     private StudentMassedLearningService studentMassedLearningService;
 
     @Autowired
-    private QuestionaryService questionaryService;
+    private UserAnswersService userAnswersService;
 
     /**
-     * 通过机器学习方法计算用户类型
+     * 通过决策树模型计算用户类型
      * @param data
      * @return
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public String getUserType(String[] data) throws IOException, ClassNotFoundException{
+    public String getUserTypeByModel(String[] data) throws IOException, ClassNotFoundException {
         if(data == null && data.length == 0){
             return "";
         }
@@ -389,11 +389,11 @@ public class UserTypeUtil {
 
 
     /**
-     * 通过调查表计算用户类型
+     * 通过用户答案计算用户类型
      * @param answers
      * @return
      */
-    public String getUserTypeByQuestionary(Integer userId, String answers) {
+    public String getUserTypeByUserAnswers(Integer userId, String answers) {
 
         if(answers == null || answers.equals("") || userId == null || userId.equals("")){
             logger.info("**************************** " + MessageType.message4);
@@ -401,9 +401,10 @@ public class UserTypeUtil {
         }
 
         //转换数据格式
-        List answersList = (List) JSON.parse(answers);
+        //List answersList = (List) JSON.parse(answers);
+        String[] answersArray = answers.split(",");
 
-        if(answersList.size() != 22){
+        if(answersArray.length != 22){
             logger.info("**************************** " + MessageType.message4);
             throw new MyException(MessageType.message4);
         }
@@ -421,12 +422,12 @@ public class UserTypeUtil {
         List type12List = new ArrayList();
         List type34List = new ArrayList();
 
-        for(int i = 0, j1 = 0, j2 = 1; i < answersList.size(); i++){
+        for(int i = 0, j1 = 0, j2 = 1; i < answersArray.length; i++){
             if(i == j1){
-                type12List.add(answersList.get(i));
+                type12List.add(answersArray[i]);
                 j1 += 2;
             }else if(i == j2){
-                type34List.add(answersList.get(i));
+                type34List.add(answersArray[i]);
                 j2 += 2;
             }
         }
@@ -464,32 +465,14 @@ public class UserTypeUtil {
         //logger.info("typeArray after sort************************* " + Arrays.toString(typeArray));
 
         //保存答案和用户类型到数据库
-        QuestionaryAnswers questionaryAnswers = new QuestionaryAnswers();
-        questionaryAnswers.setUserId(userId);
-        questionaryAnswers.setAnswer1((String)answersList.get(0));
-        questionaryAnswers.setAnswer2((String)answersList.get(1));
-        questionaryAnswers.setAnswer3((String)answersList.get(2));
-        questionaryAnswers.setAnswer4((String)answersList.get(3));
-        questionaryAnswers.setAnswer5((String)answersList.get(4));
-        questionaryAnswers.setAnswer6((String)answersList.get(5));
-        questionaryAnswers.setAnswer7((String)answersList.get(6));
-        questionaryAnswers.setAnswer8((String)answersList.get(7));
-        questionaryAnswers.setAnswer9((String)answersList.get(8));
-        questionaryAnswers.setAnswer10((String)answersList.get(9));
-        questionaryAnswers.setAnswer11((String)answersList.get(10));
-        questionaryAnswers.setAnswer12((String)answersList.get(11));
-        questionaryAnswers.setAnswer13((String)answersList.get(12));
-        questionaryAnswers.setAnswer14((String)answersList.get(13));
-        questionaryAnswers.setAnswer15((String)answersList.get(14));
-        questionaryAnswers.setAnswer16((String)answersList.get(15));
-        questionaryAnswers.setAnswer17((String)answersList.get(16));
-        questionaryAnswers.setAnswer18((String)answersList.get(17));
-        questionaryAnswers.setAnswer19((String)answersList.get(18));
-        questionaryAnswers.setAnswer20((String)answersList.get(19));
-        questionaryAnswers.setAnswer21((String)answersList.get(20));
-        questionaryAnswers.setAnswer22((String)answersList.get(21));
-        questionaryAnswers.setUserType(typeArray[typeArray.length - 1]);
-        questionaryService.save(questionaryAnswers);
+        UserAnswers userAnswers = new UserAnswers();
+        userAnswers.setUserId(userId);
+        userAnswers.setAnswers(answers);
+        userAnswers.setUserType(typeArray[typeArray.length - 1]);
+        UserAnswers userAnswers1 = userAnswersService.save(userAnswers);
+        if(userAnswers1 == null){
+            throw new MyException(MessageType.message12);
+        }
 
         return typeArray[typeArray.length - 1];
     }

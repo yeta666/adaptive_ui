@@ -1,7 +1,7 @@
 package com.adaptive.ui.service;
 
 import com.adaptive.ui.domain1.ReAutotest;
-import com.adaptive.ui.repositary1.ReAutoTestRepositary;
+import com.adaptive.ui.repository1.ReAutoTestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class ReAutoTestService {
 
     @Autowired
-    private ReAutoTestRepositary reAutoTestRepositary;
+    private ReAutoTestRepository reAutoTestRepository;
 
     /**
      * 根据userId获取用户的测试数据
@@ -23,6 +23,6 @@ public class ReAutoTestService {
      * @return
      */
     public List<ReAutotest> findAllByBbreUserId(Integer userId){
-        return reAutoTestRepositary.findAllByRateUserId(userId);
+        return reAutoTestRepository.findAllByRateUserId(userId);
     }
 }

@@ -1,15 +1,13 @@
 package com.adaptive.ui.util;
 
 import com.adaptive.ui.domain2.Model;
-import com.adaptive.ui.domain2.QuestionaryAnswers;
-import com.adaptive.ui.domain2.TrainArrayAttribute;
+import com.adaptive.ui.domain2.TrainArray;
+import com.adaptive.ui.domain2.UserAnswers;
+import com.adaptive.ui.domain2.TrainArrayAttributes;
 import com.adaptive.ui.exception.MyException;
 import com.adaptive.ui.id3Tree.TrainModel;
 import com.adaptive.ui.id3Tree.TreeNode;
-import com.adaptive.ui.service.ModelService;
-import com.adaptive.ui.service.QuestionaryService;
-import com.adaptive.ui.service.TrainArrayAttributeService;
-import com.adaptive.ui.service.TrainArrayService;
+import com.adaptive.ui.service.*;
 import com.adaptive.ui.type.MessageType;
 import com.adaptive.ui.type.ModelType;
 import org.slf4j.Logger;
@@ -43,7 +41,7 @@ public class TreeModelUtil {
     private ModelService modelService;
 
     @Autowired
-    private TrainArrayAttributeService trainArrayAttributeService;
+    private TrainArrayAttributesService trainArrayAttributesService;
 
     @Autowired
     private TrainArrayService trainArrayService;
@@ -52,7 +50,7 @@ public class TreeModelUtil {
     private UserTypeUtil userTypeUtil;
 
     @Autowired
-    private QuestionaryService questionaryService;
+    private UserAnswersService userAnswersService;
 
     /**
      * 获取训练集的方法
@@ -61,32 +59,15 @@ public class TreeModelUtil {
     public void getData(){
 
         //初始化属性集
-        TrainArrayAttribute trainArrayAttribute = trainArrayAttributeService.findByModelType(ModelType.TYPE1);
-        if(trainArrayAttribute == null){
+        TrainArrayAttributes trainArrayAttributes = trainArrayAttributesService.findByModelType(ModelType.TYPE1);
+        if(trainArrayAttributes == null){
             logger.info("**************************** " + MessageType.message7);
             throw new MyException(MessageType.message7);
         }
-        String[] attributesArray = new String[16];
-        attributesArray[0] = trainArrayAttribute.getAttribute1();
-        attributesArray[1] = trainArrayAttribute.getAttribute2();
-        attributesArray[2] = trainArrayAttribute.getAttribute3();
-        attributesArray[3] = trainArrayAttribute.getAttribute4();
-        attributesArray[4] = trainArrayAttribute.getAttribute5();
-        attributesArray[5] = trainArrayAttribute.getAttribute6();
-        attributesArray[6] = trainArrayAttribute.getAttribute7();
-        attributesArray[7] = trainArrayAttribute.getAttribute8();
-        attributesArray[8] = trainArrayAttribute.getAttribute9();
-        attributesArray[9] = trainArrayAttribute.getAttribute10();
-        attributesArray[10] = trainArrayAttribute.getAttribute11();
-        attributesArray[11] = trainArrayAttribute.getAttribute12();
-        attributesArray[12] = trainArrayAttribute.getAttribute13();
-        attributesArray[13] = trainArrayAttribute.getAttribute14();
-        attributesArray[14] = trainArrayAttribute.getAttribute15();
-        attributesArray[15] = trainArrayAttribute.getAttribute16();
+        String[] attributesArray = trainArrayAttributes.getAttributes().split(",");
         this.attributesArray = attributesArray;
 
-
-        /*//从数据库中获取训练集
+        //从数据库中获取训练集
         List<TrainArray> trainArraysList = trainArrayService.findAll();
 
         //将数据转换成Object[String[], String[], ...]的形式
@@ -112,19 +93,19 @@ public class TreeModelUtil {
             trainArrayArray[15] = trainArrayObject.getChooseCoursePartsProportion();
             trainArrayArray[16] = trainArrayObject.getUserType();
             trainArrays[i] = trainArrayArray;
-        }*/
+        }
 
         //从数据库中获取训练集
-        List<QuestionaryAnswers> questionaryAnswersList = questionaryService.findAll();
-        if(questionaryAnswersList == null || questionaryAnswersList.size() == 0){
+        /*List<UserAnswers> userAnswersList = userAnswersService.findAll();
+        if(userAnswersList == null || userAnswersList.size() == 0){
             logger.info("**************************** " + MessageType.message8);
             throw new MyException(MessageType.message8);
         }
-        Object[] trainArrays = new Object[questionaryAnswersList.size()];
-        for(int i = 0; i < questionaryAnswersList.size(); i++){
-            QuestionaryAnswers questionaryAnswers = questionaryAnswersList.get(i);
+        Object[] trainArrays = new Object[userAnswersList.size()];
+        for(int i = 0; i < userAnswersList.size(); i++){
+            UserAnswers userAnswers = userAnswersList.get(i);
             //获取一个userId
-            Integer userId = questionaryAnswers.getUserId();
+            Integer userId = userAnswers.getUserId();
             if(userId == null || userId.equals("")){
                 logger.info("**************************** " + MessageType.message8);
                 throw new MyException(MessageType.message8);
@@ -152,9 +133,9 @@ public class TreeModelUtil {
             trainArray[13] = userDataArray[13];
             trainArray[14] = userDataArray[14];
             trainArray[15] = userDataArray[15];
-            trainArray[16] = questionaryAnswers.getUserType();
+            trainArray[16] = userAnswers.getUserType();
             trainArrays[i] = trainArray;
-        }
+        }*/
 
         //初始化训练集
         this.trainArrays = trainArrays;
@@ -199,6 +180,7 @@ public class TreeModelUtil {
             throw new MyException(MessageType.message10);
         }
         return thisModel;
+
     }
 
     /**
@@ -206,7 +188,7 @@ public class TreeModelUtil {
      * 取决策树模型类型的最后一条数据
      * @return
      */
-    public TreeNode getModel() throws IOException, ClassNotFoundException{
+    public TreeNode getModel() throws IOException, ClassNotFoundException {
         Model model = modelService.findFirstByTypeOrderByIdDesc(ModelType.TYPE1);
         if(model == null){
             logger.info("**************************** " + MessageType.message6);
@@ -216,6 +198,7 @@ public class TreeModelUtil {
         ByteArrayInputStream byteArrayInputStream= new ByteArrayInputStream(b);
         ObjectInputStream objectInputStream= new ObjectInputStream(byteArrayInputStream);
         return (TreeNode)objectInputStream.readObject();
+
     }
 
     /**

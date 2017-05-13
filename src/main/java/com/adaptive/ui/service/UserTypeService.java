@@ -1,7 +1,7 @@
 package com.adaptive.ui.service;
 
 import com.adaptive.ui.controller.UserTypeController;
-import com.adaptive.ui.domain2.QuestionaryAnswers;
+import com.adaptive.ui.domain2.UserAnswers;
 import com.adaptive.ui.exception.MyException;
 import com.adaptive.ui.type.MessageType;
 import com.adaptive.ui.util.ResultUtil;
@@ -12,10 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
- * 用户类型有关的逻辑处理类
+ * 和用户类型有关的逻辑处理类
  * Created by yeta on 2017/4/6/006.
  */
 @Service
@@ -27,40 +26,56 @@ public class UserTypeService {
     private UserTypeUtil userTypeUtil;
 
     @Autowired
-    private QuestionaryService questionaryService;
+    private UserAnswersService userAnswersService;
 
     /**
-     * 通过机器学习（决策树分类方法）判断用户类型的方法
+     * 根据参数决定调用哪种计算用户类型的方法的方法
+     * @param userId
+     * @param answers
+     * @return
      */
-    public ResultUtil getUserType(Integer userId) throws IOException, ClassNotFoundException{
-        //根据userId获取userType
-        QuestionaryAnswers questionaryAnswers = questionaryService.findOne(userId);
-        if (questionaryAnswers != null && questionaryAnswers.getUserType() != null && !questionaryAnswers.getUserType().equals("")) {
-            return new ResultUtil(true, MessageType.message1, questionaryAnswers.getUserType());
-
-        } else {
-            //根据userId获取数据
-            String[] userData = userTypeUtil.getUserData(userId);
-            if (userData == null || userData.length == 0) {
-                logger.info("********************** " + MessageType.message3);
-                throw new MyException(MessageType.message3);
+    public ResultUtil getUserType(Integer userId, String answers) throws IOException, ClassNotFoundException {
+        //判断参数
+        if(answers == null || answers.equals("")){
+            //根据userId获取userType
+            UserAnswers userAnswers = userAnswersService.findOne(userId);
+            if (userAnswers != null && userAnswers.getUserType() != null && !userAnswers.getUserType().equals("")) {
+                return new ResultUtil(true, MessageType.message1, userAnswers.getUserType());
+            } else {
+                //调用模型计算用户类型
+                return this.getUserTypeByModel(userId);
             }
-            //计算用户类型
-            String userType = userTypeUtil.getUserType(userData);
-            if(userType == null || userType.equals("")){
-                logger.info("********************** " + MessageType.message4);
-                throw new MyException(MessageType.message4);
-            }
-            return new ResultUtil(true, MessageType.message1, userType);
+        }else{
+            //根据用户答案计算用户类型
+            return this.getUserTypeByUserAnswers(userId, answers);
         }
     }
 
     /**
-     * 通过调查表判断用户类型的方法
+     * 通过决策树分类方法计算用户类型的方法
      */
-    public ResultUtil getUserTypeByQuestionary(Integer userId, String answers) {
+    public ResultUtil getUserTypeByModel(Integer userId) throws IOException, ClassNotFoundException {
+        //根据userId获取数据
+        String[] userData = userTypeUtil.getUserData(userId);
+        if (userData == null || userData.length == 0) {
+            logger.info("********************** " + MessageType.message3);
+            throw new MyException(MessageType.message3);
+        }
         //计算用户类型
-        String userType = userTypeUtil.getUserTypeByQuestionary(userId, answers);
+        String userType = userTypeUtil.getUserTypeByModel(userData);
+        if(userType == null || userType.equals("")){
+            logger.info("********************** " + MessageType.message4);
+            throw new MyException(MessageType.message4);
+        }
+        return new ResultUtil(true, MessageType.message1, userType);
+    }
+
+    /**
+     * 通过用户答案计算用户类型的方法
+     */
+    public ResultUtil getUserTypeByUserAnswers(Integer userId, String answers) {
+        //计算用户类型
+        String userType = userTypeUtil.getUserTypeByUserAnswers(userId, answers);
         //封装返回数据
         if(userType == null || userType.equals("")){
             logger.info("********************** " + MessageType.message4);
