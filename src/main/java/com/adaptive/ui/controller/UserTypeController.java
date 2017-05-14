@@ -1,12 +1,9 @@
 package com.adaptive.ui.controller;
 
-import com.adaptive.ui.domain2.UserAnswers;
-import com.adaptive.ui.service.UserAnswersService;
 import com.adaptive.ui.util.ResultUtil;
 import com.adaptive.ui.service.UserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 
 
