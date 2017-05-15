@@ -16,4 +16,6 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+#自定义配置
+CHECK_TOKEN_URI: http://localhost:8083/oauth/check_token
 

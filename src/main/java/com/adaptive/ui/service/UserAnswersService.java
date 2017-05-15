@@ -6,14 +6,13 @@ import com.adaptive.ui.repository1.UserRepository;
 import com.adaptive.ui.repository2.UserAnswersRepository;
 import com.adaptive.ui.type.MessageType;
 import com.adaptive.ui.util.ResultUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.xml.transform.Result;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 和用户答案有关的逻辑操作类
@@ -21,6 +20,8 @@ import java.util.Map;
  */
 @Service
 public class UserAnswersService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserAnswersService.class);
 
     @Autowired
     private UserAnswersRepository userAnswersRepository;
@@ -52,7 +53,10 @@ public class UserAnswersService {
     public ResultUtil getAll(){
         List<UserAnswers> userAnswersList = userAnswersRepository.findAll();
         if(userAnswersList == null || userAnswersList.size() == 0){
-            throw new MyException(MessageType.message2);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "获取所有用户答案失败！");
+            throw new MyException(MessageType.message11 + " code:" + num);
         }
         List list = new ArrayList();
         for(int i = 0; i < userAnswersList.size(); i++){
@@ -64,7 +68,7 @@ public class UserAnswersService {
             map.put("userType", userAnswers.getUserType());
             list.add(map);
         }
-        return new ResultUtil(true, MessageType.message1, list);
+        return new ResultUtil(true, "", list);
     }
 
     /**
@@ -80,7 +84,10 @@ public class UserAnswersService {
             Integer userAnswers_id = Integer.valueOf(userAnswers_id_array[i]);
             userAnswersRepository.delete(userAnswers_id);
             if(userAnswersRepository.findOne(userAnswers_id) != null){
-                throw new MyException(MessageType.message14);
+                //随机生成一个message码
+                int num = new Random().nextInt(10000000);
+                logger.info(num + "删除用户答案失败！");
+                throw new MyException(MessageType.message22 + " code:" + num);
             }
         }
         return new ResultUtil(true, "", null);

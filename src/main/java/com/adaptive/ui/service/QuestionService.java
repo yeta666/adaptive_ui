@@ -9,12 +9,12 @@ import com.adaptive.ui.repository2.UserAnswersRepository;
 import com.adaptive.ui.type.MessageType;
 import com.adaptive.ui.util.ResultUtil;
 import com.adaptive.ui.repository2.QuestionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 /**
  * 与调查表题目有关的逻辑处理类
@@ -22,6 +22,8 @@ import java.util.Map;
  */
 @Service
 public class QuestionService {
+
+    private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
 
     @Autowired
     private QuestionRepository questionRepository;
@@ -48,9 +50,12 @@ public class QuestionService {
             list.add(map);
         }
         if(questionList == null || questionList.size() == 0){
-            throw new MyException(MessageType.message5);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + " 从数据库获取所有所有题目失败！");
+            throw new MyException(MessageType.message11 + " code:" + num);
         }
-        return new ResultUtil(true, MessageType.message1, list);
+        return new ResultUtil(true, "", list);
     }
 
     /**
@@ -70,7 +75,10 @@ public class QuestionService {
         question.setAnswersId(answers1.getId());
         Question question1 = questionRepository.save(question);
         if(question1 == null || question1.getContent() == null || question1.getAnswersId() == null){
-            throw new MyException(MessageType.message13);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "题目未能添加到数据库！");
+            throw new MyException(MessageType.message33 + " code:" + num);
         }
         return new ResultUtil(true, "", null);
     }
@@ -90,7 +98,10 @@ public class QuestionService {
             answerRepository.delete(question.getAnswersId());
             questionRepository.delete(question_id);
             if(answerRepository.findOne(question.getAnswersId()) != null || questionRepository.findOne(question_id) != null){
-                throw new MyException(MessageType.message14);
+                //随机生成一个message码
+                int num = new Random().nextInt(10000000);
+                logger.info(num + "删除题目失败！");
+                throw new MyException(MessageType.message22 + " code:" + num);
             }
         }
         return new ResultUtil(true, "", null);

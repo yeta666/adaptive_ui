@@ -67,7 +67,10 @@ public class UserTypeUtil {
         //获取决策树模型
         TreeNode treeNode = treeModelUtil.getModel();
         if(treeNode == null){
-            throw new MyException(MessageType.message6);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "获取决策树模型失败！");
+            throw new MyException(MessageType.message11 + " code:" + num);
         }
         //初始化模型结果
         treeModelUtil.setModelResult();
@@ -396,8 +399,10 @@ public class UserTypeUtil {
     public String getUserTypeByUserAnswers(Integer userId, String answers) {
 
         if(answers == null || answers.equals("") || userId == null || userId.equals("")){
-            logger.info("**************************** " + MessageType.message4);
-            throw new MyException(MessageType.message4);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "提交的用户答案或用户id为空！");
+            throw new MyException(MessageType.message11 + " code:" + num);
         }
 
         //转换数据格式
@@ -405,8 +410,10 @@ public class UserTypeUtil {
         String[] answersArray = answers.split(",");
 
         if(answersArray.length != 22){
-            logger.info("**************************** " + MessageType.message4);
-            throw new MyException(MessageType.message4);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "提交的用户答案格式不正确！");
+            throw new MyException(MessageType.message11 + " code:" + num);
         }
 
         /**
@@ -471,7 +478,10 @@ public class UserTypeUtil {
         userAnswers.setUserType(typeArray[typeArray.length - 1]);
         UserAnswers userAnswers1 = userAnswersService.save(userAnswers);
         if(userAnswers1 == null){
-            throw new MyException(MessageType.message12);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "保存用户答案失败！");
+            throw new MyException(MessageType.message33 + " code:" + num);
         }
 
         return typeArray[typeArray.length - 1];

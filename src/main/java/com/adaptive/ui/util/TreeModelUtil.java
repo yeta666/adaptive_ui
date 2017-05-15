@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 与决策树模型有关的工具类
@@ -61,8 +62,9 @@ public class TreeModelUtil {
         //初始化属性集
         TrainArrayAttributes trainArrayAttributes = trainArrayAttributesService.findByModelType(ModelType.TYPE1);
         if(trainArrayAttributes == null){
-            logger.info("**************************** " + MessageType.message7);
-            throw new MyException(MessageType.message7);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "获取训练集属性失败！");
         }
         String[] attributesArray = trainArrayAttributes.getAttributes().split(",");
         this.attributesArray = attributesArray;
@@ -152,8 +154,9 @@ public class TreeModelUtil {
         //实例化训练模型类
         TrainModel trainModel = new TrainModel(this.attributesArray, this.trainArrays, this.resultIndex);
         if(trainModel == null){
-            logger.info("**************************** " + MessageType.message9);
-            throw new MyException(MessageType.message9);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "训练模型失败！");
         }
         //返回决策树模型
         return trainModel.train();
@@ -176,8 +179,9 @@ public class TreeModelUtil {
         model.setCreateDate(new Date());
         Model thisModel = modelService.save(model);
         if(thisModel == null){
-            logger.info("**************************** " + MessageType.message10);
-            throw new MyException(MessageType.message10);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "保存模型失败！");
         }
         return thisModel;
 
@@ -191,8 +195,10 @@ public class TreeModelUtil {
     public TreeNode getModel() throws IOException, ClassNotFoundException {
         Model model = modelService.findFirstByTypeOrderByIdDesc(ModelType.TYPE1);
         if(model == null){
-            logger.info("**************************** " + MessageType.message6);
-            throw new MyException(MessageType.message6);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "从数据库中获取最新模型失败！");
+            throw new MyException(MessageType.message11);
         }
         byte[] b = model.getModel();
         ByteArrayInputStream byteArrayInputStream= new ByteArrayInputStream(b);

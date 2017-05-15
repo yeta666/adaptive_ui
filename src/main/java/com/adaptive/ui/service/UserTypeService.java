@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * 和用户类型有关的逻辑处理类
@@ -40,7 +41,7 @@ public class UserTypeService {
             //根据userId获取userType
             UserAnswers userAnswers = userAnswersService.findOne(userId);
             if (userAnswers != null && userAnswers.getUserType() != null && !userAnswers.getUserType().equals("")) {
-                return new ResultUtil(true, MessageType.message1, userAnswers.getUserType());
+                return new ResultUtil(true, "", userAnswers.getUserType());
             } else {
                 //调用模型计算用户类型
                 return this.getUserTypeByModel(userId);
@@ -58,16 +59,20 @@ public class UserTypeService {
         //根据userId获取数据
         String[] userData = userTypeUtil.getUserData(userId);
         if (userData == null || userData.length == 0) {
-            logger.info("********************** " + MessageType.message3);
-            throw new MyException(MessageType.message3);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "获取训练集失败！");
+            throw new MyException(MessageType.message11 + " code:" + num);
         }
         //计算用户类型
         String userType = userTypeUtil.getUserTypeByModel(userData);
         if(userType == null || userType.equals("")){
-            logger.info("********************** " + MessageType.message4);
-            throw new MyException(MessageType.message4);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "根据模型计算用户类型失败！");
+            throw new MyException(MessageType.message11 + " code:" + num);
         }
-        return new ResultUtil(true, MessageType.message1, userType);
+        return new ResultUtil(true, "", userType);
     }
 
     /**
@@ -78,10 +83,12 @@ public class UserTypeService {
         String userType = userTypeUtil.getUserTypeByUserAnswers(userId, answers);
         //封装返回数据
         if(userType == null || userType.equals("")){
-            logger.info("********************** " + MessageType.message4);
-            throw new MyException(MessageType.message4);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "根据用户答案计算用户类型失败！");
+            throw new MyException(MessageType.message11 + " code:" + num);
         }
-        return new ResultUtil(true, MessageType.message1, userType);
+        return new ResultUtil(true, "", userType);
     }
 
 }

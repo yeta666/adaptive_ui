@@ -5,13 +5,11 @@ import com.adaptive.ui.exception.MyException;
 import com.adaptive.ui.repository2.TrainArrayAttributesRepository;
 import com.adaptive.ui.type.MessageType;
 import com.adaptive.ui.util.ResultUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 与训练集属性又挂你的的逻辑处理类
@@ -19,6 +17,8 @@ import java.util.Map;
  */
 @Service
 public class TrainArrayAttributesService {
+
+    private static final Logger logger = LoggerFactory.getLogger(TrainArrayAttributesService.class);
 
     @Autowired
     private TrainArrayAttributesRepository trainArrayAttributesRepository;
@@ -38,9 +38,12 @@ public class TrainArrayAttributesService {
     public ResultUtil getAll(){
         List<TrainArrayAttributes> trainArrayAttributesList = trainArrayAttributesRepository.findAll();
         if(trainArrayAttributesList == null || trainArrayAttributesList.size() == 0){
-            throw new MyException(MessageType.message2);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "获取所有训练集属性失败！");
+            throw new MyException(MessageType.message11 + " code:" + num);
         }
-        return new ResultUtil(true, MessageType.message1, trainArrayAttributesList);
+        return new ResultUtil(true, "", trainArrayAttributesList);
     }
 
     /**

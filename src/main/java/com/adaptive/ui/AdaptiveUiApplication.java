@@ -1,6 +1,6 @@
 package com.adaptive.ui;
 
-import com.adaptive.ui.util.OauthServerUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -19,11 +19,14 @@ import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 @EnableScheduling
 public class AdaptiveUiApplication extends ResourceServerConfigurerAdapter {
 
+	@Value("${CHECK_TOKEN_URI}")
+	private String CHECK_TOKEN_URI;
+
 	// 调用远程Auth server进行token校验
 	@Bean
 	public RemoteTokenServices remoteTokenServices() {
 		RemoteTokenServices remoteTokenServices = new RemoteTokenServices();
-		remoteTokenServices.setCheckTokenEndpointUrl(OauthServerUtil.OAUTH_SERVICE_URI);
+		remoteTokenServices.setCheckTokenEndpointUrl(CHECK_TOKEN_URI);
 		return remoteTokenServices;
 	}
 

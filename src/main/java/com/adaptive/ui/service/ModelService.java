@@ -18,10 +18,7 @@ import sun.misc.MessageUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 与模型的逻辑处理类
@@ -47,7 +44,10 @@ public class ModelService {
     public ResultUtil getAll() throws IOException, ClassNotFoundException {
         List<Model> modelList = modelRepository.findAll();
         if(modelList == null || modelList.size() == 0){
-            throw new MyException(MessageType.message2);
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + " 从数据库获取所有模型失败！");
+            throw new MyException(MessageType.message11 + " code:" + num);
         }
         List list = new ArrayList();
         for(int i = 0; i < modelList.size(); i++){
@@ -65,7 +65,7 @@ public class ModelService {
             map.put("model", this.modelContent);
             list.add(map);
         }
-        return new ResultUtil(true, MessageType.message1, list);
+        return new ResultUtil(true, "", list);
     }
 
     /**
@@ -81,7 +81,10 @@ public class ModelService {
             Integer model_id = Integer.valueOf(model_id_array[i]);
             modelRepository.delete(model_id);
             if(modelRepository.findOne(model_id) != null){
-                throw new MyException(MessageType.message14);
+                //随机生成一个message码
+                int num = new Random().nextInt(10000000);
+                logger.info(num + " 从数据库获取要删除的模型失败！");
+                throw new MyException(MessageType.message22 + " code:" + num);
             }
         }
         return new ResultUtil(true, "", null);
