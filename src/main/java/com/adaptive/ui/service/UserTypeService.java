@@ -61,7 +61,7 @@ public class UserTypeService {
         if (userData == null || userData.length == 0) {
             //随机生成一个message码
             int num = new Random().nextInt(10000000);
-            logger.info(num + "获取训练集失败！");
+            logger.info(num + "获取用户数据失败！");
             throw new MyException(MessageType.message11 + " code:" + num);
         }
         //计算用户类型

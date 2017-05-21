@@ -12,6 +12,7 @@ import java.io.IOException;
  * Created by yeta on 2017/4/6/006.
  */
 @RestController
+@RequestMapping(value = "/userType")
 public class UserTypeController {
 
     @Autowired

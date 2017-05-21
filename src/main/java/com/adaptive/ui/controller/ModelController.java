@@ -33,7 +33,7 @@ public class ModelController {
      * @return
      */
     @PostMapping(value = "/delete")
-    public ResultUtil delete(@RequestParam(value = "model_ids", required = true) String model_ids){
+    public ResultUtil delete(@RequestParam(value = "ids", required = true) String model_ids){
         return modelService.delete(model_ids);
     }
 }

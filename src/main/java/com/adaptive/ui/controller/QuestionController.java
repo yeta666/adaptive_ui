@@ -25,28 +25,4 @@ public class QuestionController {
         return questionService.getAll();
     }
 
-    /**
-     * 保存一条
-     * @param question
-     * @param answer1
-     * @param answer2
-     * @return
-     */
-    @PostMapping(value = "/addOne")
-    public ResultUtil addOne(@RequestParam(value = "question", required = true) String question,
-                                     @RequestParam(value = "answer1", required = true) String answer1,
-                                     @RequestParam(value = "answer2", required = true) String answer2){
-        return questionService.addOne(question, answer1, answer2);
-    }
-
-    /**
-     * 删除
-     * @param question_ids
-     * @return
-     */
-    @PostMapping(value = "/delete")
-    public ResultUtil delete(@RequestParam(value = "question_ids", required = true) String question_ids){
-        return questionService.delete(question_ids);
-    }
-
 }

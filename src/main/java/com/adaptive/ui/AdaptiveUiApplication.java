@@ -39,8 +39,13 @@ public class AdaptiveUiApplication extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		//设置拦截的路径，需要验证access_token才能访问
-		http.authorizeRequests().antMatchers(HttpMethod.POST, "/getUserType").authenticated();
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/userType/getUserType").authenticated();
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/question/getAll").authenticated();
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/model/getAll").authenticated();
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/model/delete").authenticated();
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/userAnswers/getAll").authenticated();
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/userAnswers/delete").authenticated();
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/trainArrayAttributes/getAll").authenticated();
 	}
 
 	@Override

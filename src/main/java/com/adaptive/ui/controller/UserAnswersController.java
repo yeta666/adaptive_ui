@@ -31,7 +31,7 @@ public class UserAnswersController {
      * @return
      */
     @PostMapping(value = "/delete")
-    public ResultUtil delete(@RequestParam(value = "userAnswers_ids", required = true) String userAnswers_ids){
+    public ResultUtil delete(@RequestParam(value = "ids", required = true) String userAnswers_ids){
         return userAnswersService.delete(userAnswers_ids);
     }
 }

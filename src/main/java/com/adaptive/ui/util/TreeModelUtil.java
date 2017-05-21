@@ -65,11 +65,12 @@ public class TreeModelUtil {
             //随机生成一个message码
             int num = new Random().nextInt(10000000);
             logger.info(num + "获取训练集属性失败！");
+            return ;
         }
         String[] attributesArray = trainArrayAttributes.getAttributes().split(",");
         this.attributesArray = attributesArray;
 
-        //从数据库中获取训练集
+        /*//从数据库中获取训练集
         List<TrainArray> trainArraysList = trainArrayService.findAll();
 
         //将数据转换成Object[String[], String[], ...]的形式
@@ -95,13 +96,13 @@ public class TreeModelUtil {
             trainArrayArray[15] = trainArrayObject.getChooseCoursePartsProportion();
             trainArrayArray[16] = trainArrayObject.getUserType();
             trainArrays[i] = trainArrayArray;
-        }
+        }*/
 
         //从数据库中获取训练集
-        /*List<UserAnswers> userAnswersList = userAnswersService.findAll();
+        List<UserAnswers> userAnswersList = userAnswersService.findAll();
         if(userAnswersList == null || userAnswersList.size() == 0){
-            logger.info("**************************** " + MessageType.message8);
-            throw new MyException(MessageType.message8);
+            logger.info("获取训练集时从数据库获取用户id失败！");
+            return ;
         }
         Object[] trainArrays = new Object[userAnswersList.size()];
         for(int i = 0; i < userAnswersList.size(); i++){
@@ -109,14 +110,14 @@ public class TreeModelUtil {
             //获取一个userId
             Integer userId = userAnswers.getUserId();
             if(userId == null || userId.equals("")){
-                logger.info("**************************** " + MessageType.message8);
-                throw new MyException(MessageType.message8);
+                logger.info("获取训练集时获取到一条错误用户id数据");
+                continue;
             }
             //根据userId获取训练集数据
             String[] userDataArray = userTypeUtil.getUserData(userId);
             if(userDataArray == null || userDataArray.length == 0){
-                logger.info("**************************** " + MessageType.message3);
-                throw new MyException(MessageType.message3);
+                logger.info("获取训练集时获取到一条错误用户数据");
+                continue;
             }
             String[] trainArray = new String[userDataArray.length + 1];
             trainArray[0] = userDataArray[0];
@@ -137,7 +138,7 @@ public class TreeModelUtil {
             trainArray[15] = userDataArray[15];
             trainArray[16] = userAnswers.getUserType();
             trainArrays[i] = trainArray;
-        }*/
+        }
 
         //初始化训练集
         this.trainArrays = trainArrays;
