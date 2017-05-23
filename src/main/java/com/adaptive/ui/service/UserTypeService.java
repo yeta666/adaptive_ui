@@ -3,7 +3,9 @@ package com.adaptive.ui.service;
 import com.adaptive.ui.controller.UserTypeController;
 import com.adaptive.ui.domain2.UserAnswers;
 import com.adaptive.ui.exception.MyException;
+import com.adaptive.ui.id3Tree.TreeNode;
 import com.adaptive.ui.type.MessageType;
+import com.adaptive.ui.type.ModelType;
 import com.adaptive.ui.util.ResultUtil;
 import com.adaptive.ui.util.UserTypeUtil;
 import org.slf4j.Logger;
@@ -29,6 +31,12 @@ public class UserTypeService {
     @Autowired
     private UserAnswersService userAnswersService;
 
+    @Autowired
+    private TrainArrayAttributesService trainArrayAttributesService;
+
+    @Autowired
+    private ModelService modelService;
+
     /**
      * 根据参数决定调用哪种计算用户类型的方法的方法
      * @param userId
@@ -53,25 +61,53 @@ public class UserTypeService {
     }
 
     /**
-     * 通过决策树分类方法计算用户类型的方法
+     * 通过决策树模型计算用户类型
+     * @param userId
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
      */
     public ResultUtil getUserTypeByModel(Integer userId) throws IOException, ClassNotFoundException {
-        //根据userId获取数据
+
+        //根据用户id获取用户数据
         String[] userData = userTypeUtil.getUserData(userId);
         if (userData == null || userData.length == 0) {
             //随机生成一个message码
             int num = new Random().nextInt(10000000);
-            logger.info(num + "获取用户数据失败！");
+            logger.info(num + "根据模型计算用户类型前获取用户数据失败！");
             throw new MyException(MessageType.message11 + " code:" + num);
         }
-        //计算用户类型
-        String userType = userTypeUtil.getUserTypeByModel(userData);
+
+        //获取训练集属性
+        String[] attributesArray = trainArrayAttributesService.getTrainArrayAttributes(ModelType.TYPE1);
+        if (attributesArray == null || attributesArray.length == 0) {
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "根据模型计算用户类型前获取训练集属性失败！");
+            throw new MyException(MessageType.message11 + " code:" + num);
+        }
+
+        //获取决策树模型
+        TreeNode tree = modelService.getModel();
+        if (tree == null) {
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "根据模型计算用户类型前获取模型失败！");
+            throw new MyException(MessageType.message11 + " code:" + num);
+        }
+
+        //调用计算用户类型的方法
+        modelService.getUserTypeByModel(tree, userData, attributesArray);
+
+        //调用获取用户类型的方法
+        String userType = modelService.getUserType();
         if(userType == null || userType.equals("")){
             //随机生成一个message码
             int num = new Random().nextInt(10000000);
-            logger.info(num + "根据模型计算用户类型失败！");
+            logger.info(num + "获取根据模型计算之后的用户类型失败！");
             throw new MyException(MessageType.message11 + " code:" + num);
         }
+
         return new ResultUtil(true, "", userType);
     }
 

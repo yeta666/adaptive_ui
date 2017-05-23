@@ -29,9 +29,6 @@ public class UserTypeUtil {
     private UserService userService;
 
     @Autowired
-    private TreeModelUtil treeModelUtil;
-
-    @Autowired
     private BbsPostService bbsPostService;
 
     @Autowired
@@ -47,37 +44,7 @@ public class UserTypeUtil {
     private ReSelectCourceService reSelectCourceService;
 
     @Autowired
-    private StudentMassedLearningService studentMassedLearningService;
-
-    @Autowired
     private UserAnswersService userAnswersService;
-
-    /**
-     * 通过决策树模型计算用户类型
-     * @param data
-     * @return
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    public String getUserTypeByModel(String[] data) throws IOException, ClassNotFoundException {
-        if(data == null && data.length == 0){
-            return "";
-        }
-        treeModelUtil.getData();
-        //获取决策树模型
-        TreeNode treeNode = treeModelUtil.getModel();
-        if(treeNode == null){
-            //随机生成一个message码
-            int num = new Random().nextInt(10000000);
-            logger.info(num + "获取决策树模型失败！");
-            throw new MyException(MessageType.message11 + " code:" + num);
-        }
-        //初始化模型结果
-        treeModelUtil.setModelResult();
-        //获取给定的数据按照模型走一遍之后的结果
-        treeModelUtil.getResult(treeNode, data);
-        return treeModelUtil.getModelResult();
-    }
 
     /**
      * 根据用户id获取用户数据，并封装成决策树模型能懂的格式
@@ -86,59 +53,45 @@ public class UserTypeUtil {
      */
     public String[] getUserData(Integer userId){
         if(userId == null){
-            return new String[0];
+            return null;
         }
         //初始化返回数据
-        String[] userData = new String[16];
+        String[] userData = new String[15]; //15个训练集属性
 
-        //获取用户的数据
+        //获取用户的基本数据
         User user = userService.findOne(userId);
-        if(user == null){
-            for(int i = 0; i < 3; i++){
-                userData[i] = "";
-            }
-        }else{
+        if(user != null){
             //性别
             if(user.getUserGender() != null){
                 userData[0] = user.getUserGender();
             }else{
-                userData[0] = "";
+                logger.info("用户id为" + userId + "的用户数据不合法，没有性别数据！");
+                return null;
             }
             //入学时间
             String entranceYear = user.getUserYearOfEntrance();
             if(entranceYear != null && !entranceYear.equals("")){
                 if(Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(entranceYear.substring(0, 4)) >= 2){
-                    userData[1] = "≥2年";
+                    userData[1] = "≥2";
                 }else{
-                    userData[1] = "<2年";
+                    userData[1] = "<2";
                 }
             }else{
-                userData[1] = "";
+                logger.info("用户id为" + userId + "的用户数据不合法，没有入学年限数据！");
+                return null;
             }
-            //登陆次数
-            if(user.getUserLoginnum() != null){
-                if(user.getUserLoginnum() >= 10){
-                    userData[2] = "≥10次";
-                }else{
-                    userData[2] = "<10次";
-                }
-            }else{
-                userData[2] = "";
-            }
+        }else{
+            return null;
         }
 
         //获取用户的发布讨论数据
         List<Bbspost> bbspostList = bbsPostService.findAllByBbpoUserId(userId);
-        if(bbspostList == null || bbspostList.size() == 0){
-            for(int i = 3; i < 6; i++){
-                userData[i] = "";
-            }
-        }else{
+        if(bbspostList != null && bbspostList.size() != 0){
             //发布讨论的次数
             if(bbspostList.size() >= 5){
-                userData[3] = "≥5次";
+                userData[2] = "≥5";
             }else{
-                userData[3] = "<5次";
+                userData[2] = ">0,<5";
             }
             //发布讨论的时间
             int time1 = 0;
@@ -154,10 +107,14 @@ public class UserTypeUtil {
                     }
                 }
             }
-            if(time1 >= time2){
-                userData[4] = "工作时间多";
+            if(time1 != 0 || time2 != 0){
+                if(time1 >= time2){
+                    userData[3] = "工作时间";
+                }else{
+                    userData[3] = "非工作时间";
+                }
             }else{
-                userData[4] = "非工作时间多";
+                userData[3] = "未知";
             }
             //发布讨论的质量
             int topNum = 0;
@@ -173,45 +130,45 @@ public class UserTypeUtil {
                 if(bbspost.getBbpoIsbest()){
                     bestNum++;
                 }
-                if(bbspost.getBbpoVisitnum() >= 10){
+                if(bbspost.getBbpoVisitnum() >= 5){
                     visitNum++;
                 }
-                if(bbspost.getBbpoReplynum() >= 5){
+                if(bbspost.getBbpoReplynum() >= 3){
                     replyNum++;
                 }
-            }
-            if((topNum * Float.parseFloat("1.0") / bbspostList.size()) < (1 * Float.parseFloat("1.0") / 3) &&
-                    (bestNum * Float.parseFloat("1.0") / bbspostList.size()) < (1 * Float.parseFloat("1.0") / 3) &&
-                    (visitNum * Float.parseFloat("1.0") / bbspostList.size()) < (1 * Float.parseFloat("1.0") / 3) &&
-                    (replyNum * Float.parseFloat("1.0") / bbspostList.size()) < (1 * Float.parseFloat("1.0") / 3)){
-                userData[5] = "低";
             }
             if((topNum * Float.parseFloat("1.0") / bbspostList.size()) >= (1 * Float.parseFloat("1.0") / 3) ||
                     (bestNum * Float.parseFloat("1.0") / bbspostList.size()) >= (1 * Float.parseFloat("1.0") / 3) ||
                     (visitNum * Float.parseFloat("1.0") / bbspostList.size()) >= (1 * Float.parseFloat("1.0") / 3) ||
                     (replyNum * Float.parseFloat("1.0") / bbspostList.size()) >= (1 * Float.parseFloat("1.0") / 3)){
-                userData[5] = "中";
+                userData[4] = "中";
             }
             if((topNum * Float.parseFloat("1.0") / bbspostList.size()) >= (2 * Float.parseFloat("1.0") / 3) ||
                     (bestNum * Float.parseFloat("1.0") / bbspostList.size()) >= (2 * Float.parseFloat("1.0") / 3) ||
                     (visitNum * Float.parseFloat("1.0") / bbspostList.size()) >= (2 * Float.parseFloat("1.0") / 3) ||
                     (replyNum * Float.parseFloat("1.0") / bbspostList.size()) >= (2 * Float.parseFloat("1.0") / 3)){
-                userData[5] = "高";
+                userData[4] = "高";
             }
+            if((topNum * Float.parseFloat("1.0") / bbspostList.size()) < (1 * Float.parseFloat("1.0") / 3) &&
+                    (bestNum * Float.parseFloat("1.0") / bbspostList.size()) < (1 * Float.parseFloat("1.0") / 3) &&
+                    (visitNum * Float.parseFloat("1.0") / bbspostList.size()) < (1 * Float.parseFloat("1.0") / 3) &&
+                    (replyNum * Float.parseFloat("1.0") / bbspostList.size()) < (1 * Float.parseFloat("1.0") / 3)){
+                userData[4] = "低";
+            }
+        }else{
+            userData[2] = "0";
+            userData[3] = "未知";
+            userData[4] = "低";
         }
 
         //获取用户的回复讨论数据
         List<Bbsreply> bbsreplyList = bbsReplyService.findAllByBbreUserId(userId);
-        if(bbsreplyList == null || bbsreplyList.size() == 0){
-            for(int i = 6; i < 8; i++){
-                userData[i] = "";
-            }
-        }else{
+        if(bbsreplyList != null && bbsreplyList.size() != 0){
             //回复讨论的次数
             if(bbspostList.size() >= 5){
-                userData[6] = "≥5次";
+                userData[5] = "≥5";
             }else{
-                userData[6] = "<5次";
+                userData[5] = ">0,<5";
             }
             //回复讨论的时间
             int time1 = 0;
@@ -227,25 +184,30 @@ public class UserTypeUtil {
                     }
                 }
             }
-            if(time1 >= time2){
-                userData[7] = "工作时间多";
+            if(time1 != 0 || time2 != 0){
+                if(time1 >= time2){
+                    userData[6] = "工作时间";
+                }else{
+                    userData[6] = "非工作时间";
+                }
             }else{
-                userData[7] = "非工作时间多";
+                userData[6] = "未知";
             }
+        }else{
+            userData[5] = "0";
+            userData[6] = "未知";
         }
 
         //获取用户的学习课程数据
         List<Learnprocessrecord> learnprocessrecordList = learnProcessRecordService.findAllByBbreUserId(userId);
-        if(learnprocessrecordList == null || learnprocessrecordList.size() == 0){
-            for(int i = 8; i < 10; i++){
-                userData[i] = "";
-            }
-        }else{
+        if(learnprocessrecordList != null && learnprocessrecordList.size() != 0){
             //学习课程的次数
             if(learnprocessrecordList.size() >= 10){
-                userData[8] = "≥10次";
-            }else{
-                userData[8] = "<10次";
+                userData[7] = "≥10";
+            }else if(learnprocessrecordList.size() >= 5 && learnprocessrecordList.size() < 10){
+                userData[7] = "≥5,<10";
+            }else if(learnprocessrecordList.size() > 0 && learnprocessrecordList.size() < 5){
+                userData[7] = ">0,<5";
             }
             //学习课程的开始时间
             int time1 = 0;
@@ -261,38 +223,65 @@ public class UserTypeUtil {
                     }
                 }
             }
-            if(time1 >= time2){
-                userData[9] = "工作时间多";
+            if(time1 != 0 || time2 != 0){
+                if(time1 >= time2){
+                    userData[8] = "工作时间";
+                }else{
+                    userData[8] = "非工作时间";
+                }
             }else{
-                userData[9] = "非工作时间多";
+                userData[8] = "未知";
             }
+            //完成学习课程的比例
+            int endNum = 0;
+            for(int i = 0; i < learnprocessrecordList.size(); i++){
+                if(learnprocessrecordList.get(i).getLpreEndtime() != null){
+                    endNum++;
+                }
+            }
+            if(endNum != 0){
+                if(endNum >= learnprocessrecordList.size() * 2/3){
+                    userData[9] = "高";
+                }else if(endNum < learnprocessrecordList.size() * 1/3){
+                    userData[9] = "低";
+                }else{
+                    userData[9] = "中";
+                }
+            }else{
+                userData[9] = "低";
+            }
+        }else{
+            userData[7] = "0";
+            userData[8] = "未知";
+            userData[9] = "低";
         }
 
         //获取用户的测试数据
         List<ReAutotest> reAutotestList = reAutoTestService.findAllByBbreUserId(userId);
-        if(reAutotestList == null || reAutotestList.size() == 0){
-            for(int i = 10; i < 13; i++){
-                userData[i] = "";
-            }
-        }else{
+        if(reAutotestList != null && reAutotestList.size() != 0){
             //参与测试的次数
-            if(reAutotestList.size() >= 10){
-                userData[10] = "≥10次";
+            if(reAutotestList.size() >= 5){
+                userData[10] = "≥5";
             }else{
-                userData[10] = "<10次";
+                userData[10] = ">0,<5";
             }
             //参与所有测试的平均分
             float score = 0;
             for(int i = 0; i < reAutotestList.size(); i++){
                 score += reAutotestList.get(i).getRateScore();
             }
-            if((score / reAutotestList.size()) < 60){
-                userData[11] = "<60";
-            }else if((score / reAutotestList.size()) >= 60 && (score / reAutotestList.size()) < 80){
-                userData[11] = "≥60,<80";
-            }else if((score / reAutotestList.size()) >= 60){
-                userData[11] = "≥80";
+            if(score != 0){
+                if((score / reAutotestList.size()) < 60){
+                    userData[11] = ">0,<60";
+                }else if((score / reAutotestList.size()) >= 60 && (score / reAutotestList.size()) < 80){
+                    userData[11] = "≥60,<80";
+                }else if((score / reAutotestList.size()) >= 60){
+                    userData[11] = "≥80";
+                }
+            }else{
+                userData[11] = "0";
             }
+
             //参与测试的开始时间
             int time1 = 0;
             int time2 = 0;
@@ -307,38 +296,29 @@ public class UserTypeUtil {
                     }
                 }
             }
-            if(time1 >= time2){
-                userData[12] = "工作时间多";
+            if(time1 != 0 || time2 != 0){
+                if(time1 >= time2){
+                    userData[12] = "工作时间";
+                }else{
+                    userData[12] = "非工作时间";
+                }
             }else{
-                userData[12] = "非工作时间多";
+                userData[12] = "未知";
             }
-        }
-
-        //获取用户的集中学习数据
-        List<Studentmassedlearning> studentmassedlearningList = studentMassedLearningService.findAllByBbreUserId(userId);
-        if(studentmassedlearningList == null || studentmassedlearningList.size() == 0){
-            userData[13] = "";
         }else{
-            //参与集中学习的次数
-            if(studentmassedlearningList.size() >= 5){
-                userData[13] = "≥5次";
-            }else{
-                userData[13] = "<5次";
-            }
+            userData[10] = "0";
+            userData[11] = "0";
+            userData[12] = "未知";
         }
 
         //获取用户的选课数据
         List<ReSelectcource> reSelectcourceList = reSelectCourceService.findAllByRscoUserId(userId);
-        if(reAutotestList == null){
-            for(int i = 14; i < 16; i++){
-                userData[i] = "";
-            }
-        }else{
+        if(reAutotestList != null){
             //选课数
             if(reSelectcourceList.size() >= 5){
-                userData[14] = "≥5门";
+                userData[13] = "≥5";
             }else{
-                userData[14] = "<5门";
+                userData[13] = ">0,<5";
             }
             //选课分数中各部分所占比例
             int num1 = 0;
@@ -346,45 +326,52 @@ public class UserTypeUtil {
             int num3 = 0;
             int num4 = 0;
             for(int i = 0; i < reSelectcourceList.size(); i++){
-                float p1 = reSelectcourceList.get(i).getRscoLoginscore() / reSelectcourceList.get(i).getRscoTotalscore();
-                float p2 = reSelectcourceList.get(i).getRscoLearntimescore() / reSelectcourceList.get(i).getRscoTotalscore();
-                float p3 = reSelectcourceList.get(i).getRscoBbsdiscussscore() / reSelectcourceList.get(i).getRscoTotalscore();
-                float p4 = reSelectcourceList.get(i).getRscoSubassessscore() / reSelectcourceList.get(i).getRscoTotalscore();
-                if(p1 >= p2 && p1 >= p3 && p1 >= p4){
-                    num1++;
-                }else if(p2 >= p1 && p2 >= p3 && p2 >= p4){
-                    num2++;
-                }else if(p3 >= p1 && p3 >= p2 && p3 >= p4){
-                    num3++;
-                }else if(p4 >= p1 && p4 >= p2 && p4 >= p3){
-                    num4++;
+                float p1 = reSelectcourceList.get(i).getRscoLoginscore() / 20;
+                float p2 = reSelectcourceList.get(i).getRscoLearntimescore() / 40;
+                float p3 = reSelectcourceList.get(i).getRscoBbsdiscussscore() / 20;
+                float p4 = reSelectcourceList.get(i).getRscoSubassessscore() / 20;
+                if(p1 == 0 && p2 == 0 && p3 == 0 && p4 == 0){
+                    continue;
+                }else{
+                    if(p1 >= p2 && p1 >= p3 && p1 >= p4){
+                        num1++;
+                    }else if(p2 >= p1 && p2 >= p3 && p2 >= p4){
+                        num2++;
+                    }else if(p3 >= p1 && p3 >= p2 && p3 >= p4){
+                        num3++;
+                    }else if(p4 >= p1 && p4 >= p2 && p4 >= p3){
+                        num4++;
+                    }
                 }
             }
-            if(num1 >= num2 && num1 >= num3 && num1 >= num4){
-                if(num1 != 0) {
-                    userData[15] = "学习次数分数所占比例高";
-                }else{
-                    userData[15] = "";
+                if(num1 >= num2 && num1 >= num3 && num1 >= num4){
+                    if(num1 != 0) {
+                        userData[14] = "学习次数分数所占比例高";
+                    }else{
+                        userData[14] = "未知";
+                    }
+                }else if(num2 >= num1 && num2 >= num3 && num2 >= num4){
+                    if(num2 != 0) {
+                        userData[14] = "学习时间分数所占比例高";
+                    }else {
+                        userData[14] = "未知";
+                    }
+                }else if(num3 >= num1 && num3 >= num2 && num3 >= num4){
+                    if(num3 != 0) {
+                        userData[14] = "参与讨论分数所占比例高";
+                    }else{
+                        userData[14] = "未知";
+                    }
+                }else if(num4 >= num1 && num4 >= num2 && num4 >= num3){
+                    if(num4 != 0) {
+                        userData[14] = "主观评价分数所占比例高";
+                    }else{
+                        userData[14] = "未知";
+                    }
                 }
-            }else if(num2 >= num1 && num2 >= num3 && num2 >= num4){
-                if(num2 != 0) {
-                    userData[15] = "学习时间分数所占比例高";
-                }else {
-                    userData[15] = "";
-                }
-            }else if(num3 >= num1 && num3 >= num2 && num3 >= num4){
-                if(num3 != 0) {
-                    userData[15] = "参与讨论分数所占比例高";
-                }else{
-                    userData[15] = "";
-                }
-            }else if(num4 >= num1 && num4 >= num2 && num4 >= num3){
-                if(num4 != 0) {
-                    userData[15] = "主观评价分数所占比例高";
-                }else{
-                    userData[15] = "";
-                }
-            }
+        }else{
+            userData[13] = "0";
+            userData[14] = "未知";
         }
 
         return userData;

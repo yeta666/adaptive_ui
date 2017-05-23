@@ -6,18 +6,15 @@ import com.adaptive.ui.id3Tree.TrainModel;
 import com.adaptive.ui.id3Tree.TreeNode;
 import com.adaptive.ui.repository2.ModelRepository;
 import com.adaptive.ui.type.MessageType;
+import com.adaptive.ui.type.ModelType;
 import com.adaptive.ui.util.ResultUtil;
-import com.adaptive.ui.util.TreeModelUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import sun.misc.MessageUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -31,11 +28,16 @@ public class ModelService {
 
     private String modelContent = "";
 
+    private String userType = "";
+
     @Autowired
     private ModelRepository modelRepository;
 
     @Autowired
-    private TreeModelUtil treeModelUtil;
+    private TrainArrayAttributesService trainArrayAttributesService;
+
+    @Autowired
+    private TrainArrayService trainArrayService;
 
     /**
      * 获取所有模型
@@ -91,21 +93,45 @@ public class ModelService {
     }
 
     /**
-     * 增加一个模型的方法
-     * @param model
+     * 保存模型的方法
+     * @param tree
      * @return
      */
-    public Model save(Model model){
-        return modelRepository.save(model);
+    public void saveModel(TreeNode tree) throws IOException {
+        Model model = new Model();
+        //序列化决策树模型
+        ByteArrayOutputStream byteArrayOutputStream= new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream= new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(tree);
+        objectOutputStream.flush();
+        objectOutputStream.close();
+        model.setModel(byteArrayOutputStream.toByteArray());
+        model.setType(ModelType.TYPE1);
+        model.setCreateDate(new Date());
+        Model thisModel = modelRepository.save(model);
+        if(thisModel == null){
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "保存模型失败！");
+        }
     }
 
     /**
      * 通过模型类型查询最新的一个模型
-     * @param type
      * @return
      */
-    public Model findFirstByTypeOrderByIdDesc(String type){
-        return modelRepository.findFirstByTypeOrderByIdDesc(type);
+    public TreeNode getModel() throws IOException, ClassNotFoundException {
+        Model model = modelRepository.findFirstByTypeOrderByIdDesc(ModelType.TYPE1);
+        if(model == null){
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "从数据库中获取最新模型失败！");
+            throw new MyException(MessageType.message11);
+        }
+        byte[] b = model.getModel();
+        ByteArrayInputStream byteArrayInputStream= new ByteArrayInputStream(b);
+        ObjectInputStream objectInputStream= new ObjectInputStream(byteArrayInputStream);
+        return (TreeNode)objectInputStream.readObject();
     }
 
     /**
@@ -119,14 +145,63 @@ public class ModelService {
 
         logger.info("********************开始训练模型！*********************");
 
-        //获取训练集等数据
-        treeModelUtil.getData();
-        //训练决策树模型
-        TreeNode rootNode = treeModelUtil.trainModel();
-        //保存决策树模型
-        treeModelUtil.saveModel(rootNode);
+        //获取训练集属性
+        String[] attributesArray = trainArrayAttributesService.getTrainArrayAttributes(ModelType.TYPE1);
+
+        //获取训练集
+        Object[] trainArrays = trainArrayService.getTrainArrays();
+
+        //训练模型
+        TrainModel trainModel = new TrainModel(attributesArray, trainArrays, ((String[])trainArrays[0]).length - 1);
+        if(trainModel == null){
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "初始化训练模型类失败！");
+        }else{
+            TreeNode tree = trainModel.train();
+            if(tree == null){
+                //随机生成一个message码
+                int num = new Random().nextInt(10000000);
+                logger.info(num + "训练模型失败！");
+            }else{
+                //保存模型
+                saveModel(tree);
+            }
+        }
 
         logger.info("********************结束训练模型！*********************");
+    }
+
+    /**
+     * 根据模型计算用户类型的具体方法
+     * @param treeNode
+     * @param data
+     * @param attributesArray
+     */
+    public void getUserTypeByModel(TreeNode treeNode, String[] data, String[] attributesArray){
+        //初始化以前保存的userType
+        this.userType = "";
+        //获取该节点对应“属性集”的索引
+        int attribute_index = -1;
+        for (int i = 0; i < attributesArray.length; i++) {
+            if(treeNode.getNodeName() != null){
+                if (treeNode.getNodeName().equals(attributesArray[i])) {
+                    attribute_index = i;
+                    break;
+                }
+            }
+        }
+        //获取该节点的子节点
+        TreeNode[] childNodes = treeNode.getChildNodes();
+        if(childNodes.length != 0){
+            for(int j = 0; j < childNodes.length; j++){
+                if(childNodes[j].getParentAttribute().equals(data[attribute_index])){
+                    getUserTypeByModel(childNodes[j], data, attributesArray);
+                }
+            }
+        }else{
+            this.userType = treeNode.getNodeName();
+        }
     }
 
     /**
@@ -144,5 +219,13 @@ public class ModelService {
                 printlnTree(childNodes[i]);
             }
         }
+    }
+
+    /**
+     * 因为
+     * @return
+     */
+    public String getUserType() {
+        return userType;
     }
 }

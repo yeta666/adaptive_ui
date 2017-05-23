@@ -56,7 +56,7 @@ public class Bbspost {
     private String bbpoUserName;
 
     //帖子所属部门id
-    private Integer bbpoUserDepartId;
+    private Integer bbpoUserDepartid;
 
     //帖子所属课程名称
     private String bbpoCourName;
@@ -74,12 +74,12 @@ public class Bbspost {
         this.bbpoCourName = bbpoCourName;
     }
 
-    public Integer getBbpoUserDepartId() {
-        return bbpoUserDepartId;
+    public Integer getBbpoUserDepartid() {
+        return bbpoUserDepartid;
     }
 
-    public void setBbpoUserDepartId(Integer bbpoUserDepartId) {
-        this.bbpoUserDepartId = bbpoUserDepartId;
+    public void setBbpoUserDepartid(Integer bbpoUserDepartid) {
+        this.bbpoUserDepartid = bbpoUserDepartid;
     }
 
     public String getBbpoUserName() {

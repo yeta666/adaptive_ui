@@ -27,12 +27,21 @@ public class TrainArrayAttributesService {
      * 根据modelType获取训练集属性的方法
      * @return
      */
-    public TrainArrayAttributes findByModelType(String modelType){
-        return trainArrayAttributesRepository.findByModelType(modelType);
+    public String[] getTrainArrayAttributes(String modelType){
+        TrainArrayAttributes trainArrayAttributes = trainArrayAttributesRepository.findByModelType(modelType);
+        if(trainArrayAttributes == null){
+            //随机生成一个message码
+            int num = new Random().nextInt(10000000);
+            logger.info(num + "获取训练集属性失败！");
+            return null;
+        }else{
+            //分割，放入数组中
+            return trainArrayAttributes.getAttributes().split(",");
+        }
     }
 
     /**
-     * 获取所有训练集属性
+     * 获取所有训练集属性，管理员查看时用的方法
      * @return
      */
     public ResultUtil getAll(){

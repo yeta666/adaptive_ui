@@ -59,7 +59,7 @@ public class ReSelectcource {
 	private int rscoValid;
 
 	//选课人学校名称
-	private String rscoDepartName;
+	private String rscoUserDepaname;
 
 	//选课人班级名称
 	private String rscoClassName;
@@ -75,15 +75,17 @@ public class ReSelectcource {
 	}
 
 	//getter和setterf方法
-    public String getRscoDepartName() {
-        return rscoDepartName;
-    }
 
-    public void setRscoDepartName(String rscoDepartName) {
-        this.rscoDepartName = rscoDepartName;
-    }
 
-    public String getRscoClassName() {
+	public String getRscoUserDepaname() {
+		return rscoUserDepaname;
+	}
+
+	public void setRscoUserDepaname(String rscoUserDepaname) {
+		this.rscoUserDepaname = rscoUserDepaname;
+	}
+
+	public String getRscoClassName() {
         return rscoClassName;
     }
 
@@ -226,4 +228,5 @@ public class ReSelectcource {
 	public void setRscoState(Integer rscoState) {
 		this.rscoState = rscoState;
 	}
+
 }

@@ -17,4 +17,6 @@ public interface BbsReplyRepository extends JpaRepository<Bbsreply, Integer> {
      * @return
      */
     public List<Bbsreply> findAllByBbreUserId(Integer userId);
+
+    public List<Bbsreply> findAllByBbreBbpoId(Integer bbsPostId);
 }

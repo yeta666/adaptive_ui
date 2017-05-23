@@ -17,4 +17,6 @@ public interface BbsPostRepository extends JpaRepository<Bbspost, Integer> {
      * @return
      */
     public List<Bbspost> findAllByBbpoUserId(Integer userId);
+
+    public List<Bbspost> findAllByBbpoCourId(Integer courseId);
 }
