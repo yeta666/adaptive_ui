@@ -1,7 +1,9 @@
 package com.adaptive.ui.controller;
 
 import com.adaptive.ui.domain1.*;
+import com.adaptive.ui.domain2.TrainArray;
 import com.adaptive.ui.repository1.*;
+import com.adaptive.ui.repository2.TrainArrayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +40,13 @@ public class InsertController {
     @Autowired
     private ReAutoTestRepository reAutoTestRepository;
 
+    @Autowired
+    private TrainArrayRepository trainArrayRepository;
+
+    /**
+     * 插入选课
+     * @return
+     */
     @GetMapping(value = "/insert1")
     public String insert1(){
        /* for(int xx = 17; xx < 21; xx++){ */
@@ -71,6 +80,11 @@ public class InsertController {
         return "";
     }
 
+    /**
+     * 插入讨论
+     * @return
+     * @throws ParseException
+     */
     @GetMapping(value = "/insert2")
     public String insert2() throws ParseException {
         /*for(int xx = 16; xx < 21; xx++){ */
@@ -136,6 +150,11 @@ public class InsertController {
         return "";
     }
 
+    /**
+     * 插入回复讨论
+     * @return
+     * @throws ParseException
+     */
     @GetMapping(value = "/insert3")
     public String insert3() throws ParseException {
         /*for(int xx = 1; xx < 21; xx++){
@@ -181,6 +200,10 @@ public class InsertController {
         return "";
     }
 
+    /**
+     * 修改回复讨论的次数
+     * @return
+     */
     @GetMapping(value = "/insert4")
     public String insert4() {
         /*//获取所有讨论
@@ -198,6 +221,11 @@ public class InsertController {
         return "";
     }
 
+    /**
+     * 插入插入学习过程
+     * @return
+     * @throws ParseException
+     */
     @GetMapping(value = "/insert5")
     public String insert5() throws ParseException {
         /*for(int xx = 1; xx < 21; xx++){
@@ -271,6 +299,11 @@ public class InsertController {
         return "";
     }
 
+    /**
+     * 插入测试
+     * @return
+     * @throws ParseException
+     */
     @GetMapping(value = "/insert6")
     public String insert6() throws ParseException {
        /* for (int xx = 1; xx < 21; xx++){
@@ -316,6 +349,10 @@ public class InsertController {
         return "";
     }
 
+    /**
+     * 插入所选课程分数
+     * @return
+     */
     @GetMapping(value = "/insert7")
     public String insert7() {
         /*for(int xx = 1; xx < 21; xx++){
@@ -331,6 +368,170 @@ public class InsertController {
                 reSelectCourceRepository.save(reSelectcource);
             }
         }*/
+        return "";
+    }
+
+    /**
+     * 插入训练集
+     * @return
+     */
+    @GetMapping(value = "/insert8")
+    public String insert8() {
+        for(int i = 0; i < 20; i++){
+            TrainArray trainArray = new TrainArray();
+            //性别
+            if(new Random().nextInt(2) + 1 == 1){
+                trainArray.setGender("男");
+            }else{
+                trainArray.setGender("女");
+            }
+            //入学时间
+            if(new Random().nextInt(2) + 1 == 1){
+                trainArray.setEntranceTime("≥2");
+            }else{
+                trainArray.setEntranceTime("<2");
+            }
+            //发布讨论的次数
+            int a = new Random().nextInt(3) + 1;
+            if(a == 1){
+                trainArray.setBbsPostNum("≥5");
+            }else if(a == 2){
+                trainArray.setBbsPostNum(">0,<5");
+            }else{
+                trainArray.setBbsPostNum("0");
+            }
+            //发布讨论的时间
+            int a1 = new Random().nextInt(3) + 1;
+            if(a1 == 1){
+                trainArray.setBbsPostTime("工作时间");
+            }else if(a1 == 2){
+                trainArray.setBbsPostTime("非工作时间");
+            }else{
+                trainArray.setBbsPostTime("未知");
+            }
+            //发布讨论的质量
+            int a2 = new Random().nextInt(3) + 1;
+            if(a2 == 1){
+                trainArray.setBbsPostQuality("低");
+            }else if(a2 == 2){
+                trainArray.setBbsPostQuality("中");
+            }else{
+                trainArray.setBbsPostQuality("高");
+            }
+            //回复讨论的次数
+            int a3 = new Random().nextInt(3) + 1;
+            if(a3 == 1){
+                trainArray.setBbsReplyNum("≥5");
+            }else if(a3 == 2){
+                trainArray.setBbsReplyNum(">0,<5");
+            }else{
+                trainArray.setBbsReplyNum("0");
+            }
+            //回复讨论的时间
+            int a4 = new Random().nextInt(3) + 1;
+            if(a4 == 1){
+                trainArray.setBbsReplyTime("工作时间");
+            }else if(a4 == 2){
+                trainArray.setBbsReplyTime("非工作时间");
+            }else{
+                trainArray.setBbsReplyTime("未知");
+            }
+            //学习课程的总次数
+            int a5 = new Random().nextInt(4) + 1;
+            if(a5 == 1){
+                trainArray.setLearnAllCourseNum("≥10");
+            }else if(a5 == 2){
+                trainArray.setLearnAllCourseNum("≥5,<10");
+            }else if(a5 == 3){
+                trainArray.setLearnAllCourseNum(">0,<5");
+            }else{
+                trainArray.setLearnAllCourseNum("0");
+            }
+            //学习课程的开始时间
+            int a6 = new Random().nextInt(3) + 1;
+            if(a6 == 1){
+                trainArray.setLearnCourseBeginTime("工作时间");
+            }else if(a6 == 2){
+                trainArray.setLearnCourseBeginTime("非工作时间");
+            }else{
+                trainArray.setLearnCourseBeginTime("未知");
+            }
+            //完成学习课程的比例
+            int a7 = new Random().nextInt(3) + 1;
+            if(a7 == 1){
+                trainArray.setFinishedCourseProportion("低");
+            }else if(a7 == 2){
+                trainArray.setFinishedCourseProportion("中");
+            }else{
+                trainArray.setFinishedCourseProportion("高");
+            }
+            //参与测试的次数
+            int a8 = new Random().nextInt(3) + 1;
+            if(a8 == 1){
+                trainArray.setTestNum("≥5");
+            }else if(a8 == 2){
+                trainArray.setTestNum(">0,<5");
+            }else{
+                trainArray.setTestNum("0");
+            }
+            //参与测试的平均分
+            int a9 = new Random().nextInt(4) + 1;
+            if(a9 == 1){
+                trainArray.setTestScore("≥80");
+            }else if(a9 == 2){
+                trainArray.setTestScore("≥60,<80");
+            }else if(a9 == 3){
+                trainArray.setTestScore(">0,<60");
+            }else{
+                trainArray.setTestScore("0");
+            }
+            //参与测试的开始时间
+            int a10 = new Random().nextInt(3) + 1;
+            if(a10 == 1){
+                trainArray.setTestBeginTime("工作时间");
+            }else if(a10 == 2){
+                trainArray.setTestBeginTime("非工作时间");
+            }else{
+                trainArray.setTestBeginTime("未知");
+            }
+            //选课数
+            int a11 = new Random().nextInt(3) + 1;
+            if(a11 == 1){
+                trainArray.setChooseCourseNum("≥5");
+            }else if(a11 == 2){
+                trainArray.setChooseCourseNum(">0,<5");
+            }else{
+                trainArray.setChooseCourseNum("0");
+            }
+            //选课分数各部分占的比例
+            int a12 = new Random().nextInt(5) + 1;
+            if(a12 == 1){
+                trainArray.setChooseCoursePartsProportion("学习次数分数所占比例高");
+            }else if(a12 == 2){
+                trainArray.setChooseCoursePartsProportion("学习时间分数所占比例高");
+            }else if(a12 == 3){
+                trainArray.setChooseCoursePartsProportion("参与讨论分数所占比例高");
+            }else if(a12 == 4){
+                trainArray.setChooseCoursePartsProportion("主观评价分数所占比例高");
+            }else{
+                trainArray.setChooseCoursePartsProportion("未知");
+            }
+            //用户类型
+            int a13 = new Random().nextInt(4) + 1;
+            if(a13 == 1){
+                trainArray.setUserType("活跃型");
+            }else if(a13 == 2){
+                trainArray.setUserType("沉思型");
+            }else if(a13 == 3){
+                trainArray.setUserType("感悟型");
+            }else{
+                trainArray.setUserType("直觉型");
+            }
+
+
+            //保存
+            trainArrayRepository.save(trainArray);
+        }
         return "";
     }
 

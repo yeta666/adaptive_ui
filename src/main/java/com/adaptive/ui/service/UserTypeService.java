@@ -2,8 +2,10 @@ package com.adaptive.ui.service;
 
 import com.adaptive.ui.controller.UserTypeController;
 import com.adaptive.ui.domain2.UserAnswers;
+import com.adaptive.ui.domain2.UserType;
 import com.adaptive.ui.exception.MyException;
 import com.adaptive.ui.id3Tree.TreeNode;
+import com.adaptive.ui.repository2.UserTypeRepository;
 import com.adaptive.ui.type.MessageType;
 import com.adaptive.ui.type.ModelType;
 import com.adaptive.ui.util.ResultUtil;
@@ -32,10 +34,7 @@ public class UserTypeService {
     private UserAnswersService userAnswersService;
 
     @Autowired
-    private TrainArrayAttributesService trainArrayAttributesService;
-
-    @Autowired
-    private ModelService modelService;
+    private UserTypeRepository userTypeRepository;
 
     /**
      * 根据参数决定调用哪种计算用户类型的方法的方法
@@ -46,69 +45,23 @@ public class UserTypeService {
     public ResultUtil getUserType(Integer userId, String answers) throws IOException, ClassNotFoundException {
         //判断参数
         if(answers == null || answers.equals("")){
-            //根据userId获取userType
+            //根据userId从userAnswers表中获取userType
             UserAnswers userAnswers = userAnswersService.findOne(userId);
             if (userAnswers != null && userAnswers.getUserType() != null && !userAnswers.getUserType().equals("")) {
                 return new ResultUtil(true, "", userAnswers.getUserType());
             } else {
-                //调用模型计算用户类型
-                return this.getUserTypeByModel(userId);
+                //根据userId从user_type表中获取userType
+                UserType userType = userTypeRepository.findOne(userId);
+                if(userType != null && !userType.getUserType().equals("")){
+                    return new ResultUtil(true, "", userType.getUserType());
+                }else{
+                    return new ResultUtil(false, "没有获取到用户类型", null);
+                }
             }
         }else{
             //根据用户答案计算用户类型
             return this.getUserTypeByUserAnswers(userId, answers);
         }
-    }
-
-    /**
-     * 通过决策树模型计算用户类型
-     * @param userId
-     * @return
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    public ResultUtil getUserTypeByModel(Integer userId) throws IOException, ClassNotFoundException {
-
-        //根据用户id获取用户数据
-        String[] userData = userTypeUtil.getUserData(userId);
-        if (userData == null || userData.length == 0) {
-            //随机生成一个message码
-            int num = new Random().nextInt(10000000);
-            logger.info(num + "根据模型计算用户类型前获取用户数据失败！");
-            throw new MyException(MessageType.message11 + " code:" + num);
-        }
-
-        //获取训练集属性
-        String[] attributesArray = trainArrayAttributesService.getTrainArrayAttributes(ModelType.TYPE1);
-        if (attributesArray == null || attributesArray.length == 0) {
-            //随机生成一个message码
-            int num = new Random().nextInt(10000000);
-            logger.info(num + "根据模型计算用户类型前获取训练集属性失败！");
-            throw new MyException(MessageType.message11 + " code:" + num);
-        }
-
-        //获取决策树模型
-        TreeNode tree = modelService.getModel();
-        if (tree == null) {
-            //随机生成一个message码
-            int num = new Random().nextInt(10000000);
-            logger.info(num + "根据模型计算用户类型前获取模型失败！");
-            throw new MyException(MessageType.message11 + " code:" + num);
-        }
-
-        //调用计算用户类型的方法
-        modelService.getUserTypeByModel(tree, userData, attributesArray);
-
-        //调用获取用户类型的方法
-        String userType = modelService.getUserType();
-        if(userType == null || userType.equals("")){
-            //随机生成一个message码
-            int num = new Random().nextInt(10000000);
-            logger.info(num + "获取根据模型计算之后的用户类型失败！");
-            throw new MyException(MessageType.message11 + " code:" + num);
-        }
-
-        return new ResultUtil(true, "", userType);
     }
 
     /**
@@ -125,6 +78,32 @@ public class UserTypeService {
             throw new MyException(MessageType.message11 + " code:" + num);
         }
         return new ResultUtil(true, "", userType);
+    }
+
+    /**
+     * 根据userId获取用户类型的方法
+     * @param userId
+     * @return
+     */
+    public UserType findOne(Integer userId){
+        return userTypeRepository.findOne(userId);
+    }
+
+    /**
+     * 根据userId删除用户类型的方法
+     * @param userId
+     */
+    public void delete(Integer userId){
+        userTypeRepository.delete(userId);
+    }
+
+    /**
+     * 保存一条用户答案数据的方法
+     * @param userType
+     * @return
+     */
+    public UserType save(UserType userType){
+        return userTypeRepository.save(userType);
     }
 
 }

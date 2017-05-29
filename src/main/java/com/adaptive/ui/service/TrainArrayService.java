@@ -88,4 +88,37 @@ public class TrainArrayService {
         }
         return trainArrays;
     }
+
+    /**
+     * 从数据库中获取训练集的方法
+     * @return
+     */
+    public Object[] getTrainArrays2(){
+        //获取所有
+        List<TrainArray> trainArrayList = trainArrayRepository.findAll();
+        Object[] trainArrays = new Object[trainArrayList.size()];
+        for(int i = 0; i < trainArrayList.size(); i++){
+            //获取一条
+            TrainArray trainArray = trainArrayList.get(i);
+            String[] arrays = new String[16];
+            arrays[0] = trainArray.getGender();
+            arrays[1] = trainArray.getEntranceTime();
+            arrays[2] = trainArray.getBbsPostNum();
+            arrays[3] = trainArray.getBbsPostTime();
+            arrays[4] = trainArray.getBbsPostQuality();
+            arrays[5] = trainArray.getBbsReplyNum();
+            arrays[6] = trainArray.getBbsReplyTime();
+            arrays[7] = trainArray.getLearnAllCourseNum();
+            arrays[8] = trainArray.getLearnCourseBeginTime();
+            arrays[9] = trainArray.getFinishedCourseProportion();
+            arrays[10] = trainArray.getTestNum();
+            arrays[11] = trainArray.getTestScore();
+            arrays[12] = trainArray.getTestBeginTime();
+            arrays[13] = trainArray.getChooseCourseNum();
+            arrays[14] = trainArray.getChooseCoursePartsProportion();
+            arrays[15] = trainArray.getUserType();
+            trainArrays[i] = arrays;
+        }
+        return trainArrays;
+    }
 }

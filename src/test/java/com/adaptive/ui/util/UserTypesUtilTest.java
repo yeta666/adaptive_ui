@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 /**
  * Created by yeta on 2017/4/21/021.
  */
-public class UserTypeUtilTest {
+public class UserTypesUtilTest {
 
     @Autowired
     private UserTypeUtil userTypeUtil;

@@ -21,9 +21,6 @@ public class TrainArray {
     //入学时间
     private String entranceTime;
 
-    //登陆次数
-    private String loginNum;
-
     //发布讨论的次数
     private String bbsPostNum;
 
@@ -39,23 +36,23 @@ public class TrainArray {
     //回复讨论的时间
     private String bbsReplyTime;
 
-    //学习所有课程的总次数
+    //学习课程的总次数
     private String learnAllCourseNum;
 
     //学习课程的开始时间
     private String learnCourseBeginTime;
 
+    //完成学习课程的比例
+    private String finishedCourseProportion;
+
     //参与测试的次数
     private String testNum;
 
-    //参与测试的分数
+    //参与测试的平均分
     private String testScore;
 
     //参与测试的开始时间
     private String testBeginTime;
-
-    //参与集中学习的次数
-    private String massedLearningNum;
 
     //选课数
     private String chooseCourseNum;
@@ -93,14 +90,6 @@ public class TrainArray {
 
     public void setEntranceTime(String entranceTime) {
         this.entranceTime = entranceTime;
-    }
-
-    public String getLoginNum() {
-        return loginNum;
-    }
-
-    public void setLoginNum(String loginNum) {
-        this.loginNum = loginNum;
     }
 
     public String getBbsPostNum() {
@@ -159,6 +148,14 @@ public class TrainArray {
         this.learnCourseBeginTime = learnCourseBeginTime;
     }
 
+    public String getFinishedCourseProportion() {
+        return finishedCourseProportion;
+    }
+
+    public void setFinishedCourseProportion(String finishedCourseProportion) {
+        this.finishedCourseProportion = finishedCourseProportion;
+    }
+
     public String getTestNum() {
         return testNum;
     }
@@ -181,14 +178,6 @@ public class TrainArray {
 
     public void setTestBeginTime(String testBeginTime) {
         this.testBeginTime = testBeginTime;
-    }
-
-    public String getMassedLearningNum() {
-        return massedLearningNum;
-    }
-
-    public void setMassedLearningNum(String massedLearningNum) {
-        this.massedLearningNum = massedLearningNum;
     }
 
     public String getChooseCourseNum() {
@@ -214,5 +203,4 @@ public class TrainArray {
     public void setUserType(String userType) {
         this.userType = userType;
     }
-
 }

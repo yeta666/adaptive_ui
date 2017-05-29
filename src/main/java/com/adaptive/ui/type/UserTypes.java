@@ -4,7 +4,7 @@ package com.adaptive.ui.type;
  * 所有用户类型
  * Created by yeta on 2017/4/6/006.
  */
-public interface UserType {
+public interface UserTypes {
     public static final String TYPE1 = "活跃型";
     public static final String TYPE2 = "沉思型";
     public static final String TYPE3 = "感悟型";

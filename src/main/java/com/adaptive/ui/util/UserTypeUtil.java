@@ -1,19 +1,21 @@
 package com.adaptive.ui.util;
 
 import com.adaptive.ui.domain1.*;
+import com.adaptive.ui.domain2.TrainArrayAttributes;
 import com.adaptive.ui.domain2.UserAnswers;
+import com.adaptive.ui.domain2.UserType;
 import com.adaptive.ui.exception.MyException;
 import com.adaptive.ui.id3Tree.TreeNode;
+import com.adaptive.ui.repository2.UserTypeRepository;
 import com.adaptive.ui.service.*;
 import com.adaptive.ui.type.MessageType;
-import com.adaptive.ui.type.UserType;
-import com.alibaba.fastjson.JSON;
+import com.adaptive.ui.type.ModelType;
+import com.adaptive.ui.type.UserTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -45,6 +47,15 @@ public class UserTypeUtil {
 
     @Autowired
     private UserAnswersService userAnswersService;
+
+    @Autowired
+    private ModelService modelService;
+
+    @Autowired
+    private TrainArrayAttributesService trainArrayAttributesService;
+
+    @Autowired
+    private UserTypeService userTypeService;
 
     /**
      * 根据用户id获取用户数据，并封装成决策树模型能懂的格式
@@ -377,6 +388,47 @@ public class UserTypeUtil {
         return userData;
     }
 
+    /**
+     * 设置所有用户类型的方法
+     * @param tree
+     */
+    public void setUserTypes(TreeNode tree){
+        //获取所有所有用户
+        List<User> userList = userService.findAll();
+        if (userList == null || userList.size() == 0) {
+            logger.info("训练模型完成之后获取所有用户类型时获取所有用户失败！");
+            return;
+        }
+        //获取训练集属性
+        String[] attributesArray = trainArrayAttributesService.getTrainArrayAttributes(ModelType.TYPE1);
+        if(attributesArray == null || attributesArray.length == 0){
+            logger.info("训练模型完成之后获取所有用户类型时获取训练集属性失败！");
+            return;
+        }
+        for(int i = 0; i < userList.size(); i++){
+            //获取一个用户
+            User user = userList.get(i);
+            //根据id去查询用户是否填写调查表
+            if(userAnswersService.findOne(user.getUserId()) == null){
+                //获取用户数据
+                String[] userData = getUserData(user.getUserId());
+                if(userData == null || userData.length == 0){
+                    logger.info("训练模型完成之后获取所有用户类型时获取用户" + user.getUserId() + "的用户数据失败！");
+                    continue;
+                }
+                //计算用户类型之后保存
+                UserType userType = new UserType();
+                userType.setUserId(user.getUserId());
+                modelService.getUserTypeByModel(tree, userData, attributesArray);
+                userType.setUserType(modelService.getUserType());
+                UserType userType1 = userTypeService.save(userType);
+                if(userType1 == null){
+                    logger.info("训练模型完成之后获取所有用户类型时保存用户" + user.getUserId() + "的用户类型失败！");
+                    continue;
+                }
+            }
+        }
+    }
 
     /**
      * 通过用户答案计算用户类型
@@ -431,8 +483,8 @@ public class UserTypeUtil {
                 Integer.valueOf(getType(type34List).substring(0, 1))
         };
         String[] typeArray = {
-                getType(type12List).substring(1, 2).equals("a") ? UserType.TYPE1 : UserType.TYPE2,
-                getType(type34List).substring(1, 2).equals("a") ? UserType.TYPE3 : UserType.TYPE4,
+                getType(type12List).substring(1, 2).equals("a") ? UserTypes.TYPE1 : UserTypes.TYPE2,
+                getType(type34List).substring(1, 2).equals("a") ? UserTypes.TYPE3 : UserTypes.TYPE4,
         };
 
         //logger.info("levelArray before sort************************* " + Arrays.toString(levelArray));
@@ -469,6 +521,12 @@ public class UserTypeUtil {
             int num = new Random().nextInt(10000000);
             logger.info(num + "保存用户答案失败！");
             throw new MyException(MessageType.message33 + " code:" + num);
+        }
+
+        //删除user_type表里面的数据
+        userTypeService.delete(userId);
+        if(userTypeService.findOne(userId) != null){
+            logger.info("删除用户在" + userId + "user_type表内的用户类型失败！");
         }
 
         return typeArray[typeArray.length - 1];

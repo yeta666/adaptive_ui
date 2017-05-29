@@ -8,6 +8,7 @@ import com.adaptive.ui.repository2.ModelRepository;
 import com.adaptive.ui.type.MessageType;
 import com.adaptive.ui.type.ModelType;
 import com.adaptive.ui.util.ResultUtil;
+import com.adaptive.ui.util.UserTypeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class ModelService {
 
     @Autowired
     private TrainArrayService trainArrayService;
+
+    @Autowired
+    private UserTypeUtil userTypeUtill;
 
     /**
      * 获取所有模型
@@ -150,6 +154,7 @@ public class ModelService {
 
         //获取训练集
         Object[] trainArrays = trainArrayService.getTrainArrays();
+        //Object[] trainArrays = trainArrayService.getTrainArrays2();
 
         //训练模型
         TrainModel trainModel = new TrainModel(attributesArray, trainArrays, ((String[])trainArrays[0]).length - 1);
@@ -166,9 +171,10 @@ public class ModelService {
             }else{
                 //保存模型
                 saveModel(tree);
+                //设置所有用户的用户类型
+                userTypeUtill.setUserTypes(tree);
             }
         }
-
         logger.info("********************结束训练模型！*********************");
     }
 
