@@ -250,17 +250,22 @@ public class UserTypeUtil {
                     endNum++;
                 }
             }
+            double a = endNum * Double.parseDouble("1.0");
+            double b = learnprocessrecordList.size() * 2 * Double.parseDouble("1.0") / 3;
+            double c = learnprocessrecordList.size() * 1 * Double.parseDouble("1.0") / 3;
             if(endNum != 0){
-                if(endNum >= learnprocessrecordList.size() * 2/3){
+                if(a >= b){
                     userData[9] = "高";
-                }else if(endNum < learnprocessrecordList.size() * 1/3){
-                    userData[9] = "低";
-                }else{
+                }else if(a < b && a >= c){
                     userData[9] = "中";
+                }else{
+                    userData[9] = "低";
                 }
-            }else{
+            }else {
                 userData[9] = "低";
             }
+            System.out.println(a < b && a >= c);
+            System.out.println(a + " " + b + " " + c + " " + userData[9]);
         }else{
             userData[7] = "0";
             userData[8] = "未知";
@@ -524,9 +529,11 @@ public class UserTypeUtil {
         }
 
         //删除user_type表里面的数据
-        userTypeService.delete(userId);
         if(userTypeService.findOne(userId) != null){
-            logger.info("删除用户在" + userId + "user_type表内的用户类型失败！");
+            userTypeService.delete(userId);
+            if(userTypeService.findOne(userId) != null){
+                logger.info("删除用户在" + userId + "user_type表内的用户类型失败！");
+            }
         }
 
         return typeArray[typeArray.length - 1];

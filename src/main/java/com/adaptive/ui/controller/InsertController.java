@@ -47,9 +47,9 @@ public class InsertController {
      * 插入选课
      * @return
      */
-    @GetMapping(value = "/insert1")
+    /*@GetMapping(value = "/insert1")
     public String insert1(){
-       /* for(int xx = 17; xx < 21; xx++){ */
+        for(int xx = 17; xx < 21; xx++){
             //随机生成要选的课程数量
             int num = new Random().nextInt(10);
             //根据数量生成课程id
@@ -76,18 +76,18 @@ public class InsertController {
                 reSelectcource.setRscoValid(1);
                 reSelectCourceRepository.save(reSelectcource);
             }
-       /*}*/
+       }
         return "";
-    }
+    }*/
 
     /**
      * 插入讨论
      * @return
      * @throws ParseException
      */
-    @GetMapping(value = "/insert2")
+    /*@GetMapping(value = "/insert2")
     public String insert2() throws ParseException {
-        /*for(int xx = 16; xx < 21; xx++){ */
+        for(int xx = 16; xx < 21; xx++){
             //获取选择的课程
             List<ReSelectcource> reSelectcourceList = reSelectCourceRepository.findAllByRscoUserId(99);
             for(int i = 0; i < reSelectcourceList.size(); i++){
@@ -146,18 +146,18 @@ public class InsertController {
                 }
                 bbsPostRepository.save(bbspost);
             }
-        /*}*/
+        }
         return "";
-    }
+    }*/
 
     /**
      * 插入回复讨论
      * @return
      * @throws ParseException
      */
-    @GetMapping(value = "/insert3")
+    /*@GetMapping(value = "/insert3")
     public String insert3() throws ParseException {
-        /*for(int xx = 1; xx < 21; xx++){
+        for(int xx = 1; xx < 21; xx++){
             //一个人回复0-5个讨论
             int num = new Random().nextInt(5);
             System.out.println("num " + num);
@@ -196,17 +196,17 @@ public class InsertController {
                     }
                 }
             }
-        }*/
+        }
         return "";
-    }
+    }*/
 
     /**
      * 修改回复讨论的次数
      * @return
      */
-    @GetMapping(value = "/insert4")
+    /*@GetMapping(value = "/insert4")
     public String insert4() {
-        /*//获取所有讨论
+        //获取所有讨论
         List<Bbspost> bbspostList = bbsPostRepository.findAll();
         for(int i = 0; i < bbspostList.size(); i++){
             //获取一条讨论
@@ -217,18 +217,18 @@ public class InsertController {
             bbspost.setBbpoReplynum(bbsreplyList.size());
             //更新
             bbsPostRepository.save(bbspost);
-        }*/
+        }
         return "";
-    }
+    }*/
 
     /**
      * 插入插入学习过程
      * @return
      * @throws ParseException
      */
-    @GetMapping(value = "/insert5")
+    /*@GetMapping(value = "/insert5")
     public String insert5() throws ParseException {
-        /*for(int xx = 1; xx < 21; xx++){
+        for(int xx = 1; xx < 21; xx++){
             //获取该用户选的所有课程
             List<ReSelectcource> reSelectcourceList = reSelectCourceRepository.findAllByRscoUserId(xx);
             if(reSelectcourceList.size() != 0){
@@ -295,18 +295,18 @@ public class InsertController {
                     }
                 }
             }
-        }*/
+        }
         return "";
-    }
+    }*/
 
     /**
      * 插入测试
      * @return
      * @throws ParseException
      */
-    @GetMapping(value = "/insert6")
+    /*@GetMapping(value = "/insert6")
     public String insert6() throws ParseException {
-       /* for (int xx = 1; xx < 21; xx++){
+        for (int xx = 1; xx < 21; xx++){
             //判断用户是否选择了可以测试的这两门课
             List<ReSelectcource> reSelectcourceList = reSelectCourceRepository.findAllByRscoUserId(xx);
             if(reSelectcourceList.size() != 0){
@@ -345,17 +345,17 @@ public class InsertController {
                     }
                 }
             }
-        }*/
+        }
         return "";
-    }
+    }*/
 
     /**
      * 插入所选课程分数
      * @return
      */
-    @GetMapping(value = "/insert7")
+    /*@GetMapping(value = "/insert7")
     public String insert7() {
-        /*for(int xx = 1; xx < 21; xx++){
+        for(int xx = 1; xx < 21; xx++){
             //获取所有选的课程
             List<ReSelectcource> reSelectcourceList = reSelectCourceRepository.findAllByRscoUserId(xx);
             for(int i = 0; i < reSelectcourceList.size(); i++){
@@ -367,15 +367,15 @@ public class InsertController {
                 reSelectcource.setRscoSubassessscore(new Float(new Random().nextInt(21)));
                 reSelectCourceRepository.save(reSelectcource);
             }
-        }*/
+        }
         return "";
-    }
+    }*/
 
     /**
      * 插入训练集
      * @return
      */
-    @GetMapping(value = "/insert8")
+    /*@GetMapping(value = "/insert8")
     public String insert8() {
         for(int i = 0; i < 20; i++){
             TrainArray trainArray = new TrainArray();
@@ -533,7 +533,7 @@ public class InsertController {
             trainArrayRepository.save(trainArray);
         }
         return "";
-    }
+    }*/
 
     public int[] randomCommon(int min, int max, int n){
         if (n > (max - min + 1) || max < min) {

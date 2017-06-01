@@ -52,11 +52,10 @@ public class UserTypeService {
             } else {
                 //根据userId从user_type表中获取userType
                 UserType userType = userTypeRepository.findOne(userId);
-                if(userType != null && !userType.getUserType().equals("")){
-                    return new ResultUtil(true, "", userType.getUserType());
-                }else{
+                if(userType == null || userType.getUserType() == null || userType.getUserType().equals("")){
                     return new ResultUtil(false, "没有获取到用户类型", null);
                 }
+                return new ResultUtil(true, "", userType.getUserType());
             }
         }else{
             //根据用户答案计算用户类型
