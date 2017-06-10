@@ -38,12 +38,12 @@ public class TestController {
     @Autowired
     private UserTypeUtil userTypeUtil;
 
-    /*@GetMapping(value = "/testGetTrainArrayAttributes")
+    @GetMapping(value = "/testGetTrainArrayAttributes")
     public String[] testGetTrainArrayAttributes() {
         return trainArrayAttributesService.getTrainArrayAttributes(ModelType.TYPE1);
     }
 
-    @GetMapping(value = "/testGetTrainArrays")
+    /*@GetMapping(value = "/testGetTrainArrays")
     public Object[] testGetTrainArrays(){
         return trainArrayService.getTrainArrays();
     }
